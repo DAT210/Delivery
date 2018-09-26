@@ -1,25 +1,25 @@
 ![Logo of the project](https://bigmickey.ie/wp-content/uploads/2017/10/Delivery.png)
 
-# Delivery &middot; [![Build Status](https://img.shields.io/travis/npm/npm/latest.svg?style=flat-square)](https://travis-ci.org/npm/npm) [![npm](https://img.shields.io/npm/v/npm.svg?style=flat-square)](https://www.npmjs.com/package/npm) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)
+# Delivery - Group 2
+
 > Delivery service for restaurant project
 
 Delivery service that will provide APIs for obtaining info regarding available delivery options and ETAs.
 
-## Installing / Getting started ##TODO
+## Installing / Getting started
 
-A quick introduction of the minimal setup you need to get a hello world up &
-running.
+* git clone https://github.com/DAT210/Delivery.git
+* cd to repo directory
+* run command: "docker-compose up --build"
 
-```shell
-commands here
-```
-
-Here you should say what actually happens when you execute the code above.
+### Container should now be visible
+* On docker: localhost:4020
+* On docker toolbox: 192.168.99.100:4020
 
 ## Developing
 
 ### Built With
-Python/Flask
+Docker container using: Python/Flask
 
 ### Prerequisites
 [Docker](https://www.docker.com/get-started)
