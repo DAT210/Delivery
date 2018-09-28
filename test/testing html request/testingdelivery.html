@@ -21,12 +21,9 @@
 
     <button id="routewithget">did you get here with "get"? give some text:</button><input type="text" id="theinput1"><br>
 
-    <button id="routewithpost">did you get here with "post"? give some text:</button><input type="text" id="theinput2"><br>
-
-    <button id="routewithpostorget_choseget">did you get here? choose post or get and give some text</button>
-    <input type="radio" name="routechoice" value="get" checked> Get
-    <input type="radio" name="routechoice" value="post"> Post 
-    <input type="text" id="theinput3">
+    <form action="" method="post" id="routewithpostform" onsubmit="return false">
+        <button id="routewithpost">did you get here with "post"? give some text:</button><input type="text" name="aKey" id="theinput2"><br>
+    </form>
     
 </body>
 </html>

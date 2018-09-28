@@ -1,10 +1,34 @@
 from flask import Flask, request
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app) #Makes it possible to send POST requests from javascript outside this service.
 
 @app.route('/')
 def hello_world():
     return 'Hello World! We have Flask in a Docker container!'
+
+
+#TODO: Implement functioncalls depending on routes and content of http requests
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###########################################################################
+##########Just for testing#################################################
 
 @app.route("/testing")
 def testing():
@@ -12,15 +36,15 @@ def testing():
 
 @app.route("/testingget", methods=["GET"])
 def testingget():
-    return 'Yes, you got here with '+ request.args.get("test")
+    return 'Yes, you got here with the text: '+ request.args.get("test")
 
 @app.route("/testingpost", methods=["POST"])
 def testingpost():
-    return 'Yes, you got here'
+    testvalue = "Nothing"
+    if "aKey" in request.form :
+        testvalue = request.form["aKey"]
+    return "you got here " + testvalue 
 
-@app.route("/testing", methods=["POST, GET"])
-def testinggetandpost():
-    return 'Yes, you got here'
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+    app.run(debug=True, host='0.0.0.0', port=80)
