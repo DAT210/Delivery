@@ -1,0 +1,13 @@
+version: "3"
+services:
+  app:
+    container_name: deliveryServiceBeingTested
+    build: ../../.
+    ports:
+      - '4020:80'
+
+  test:
+    container_name: serviceTester
+    build: .
+    ports:
+      - '4029:80'

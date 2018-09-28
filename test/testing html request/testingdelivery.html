@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <title>Delivery service testing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    Delivery testing:<br>
+    What type of docker are you running?
+    <input type="radio" name="dockertype" value="127.0.0.1" checked> Normal
+    <input type="radio" name="dockertype" value="192.168.99.100"> Toolbox
+    <br>
+    <button id="find">did you find the service?</button><br>
+
+    <button id="withroute">did you get here?</button><br>
+
+    <button id="routewithget">did you get here with "get"? give some text:</button><input type="text" id="theinput1"><br>
+
+    <form action="" method="post" id="routewithpostform" onsubmit="return false">
+        <button id="routewithpost">did you get here with "post"? give some text:</button><input type="text" name="aKey" id="theinput2"><br>
+    </form>
+    
+</body>
+</html>
