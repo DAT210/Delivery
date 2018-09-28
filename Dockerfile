@@ -4,14 +4,12 @@ LABEL Author="Group 2"
 
 WORKDIR /app
 
-COPY docker_files/requirements.txt /app
+COPY src /app
 
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
-
-COPY . /app
+RUN pip install --trusted-host pypi.python.org -r docker_files/requirements.txt
 
 EXPOSE 80
 
 ENV NAME Delivery
 
-CMD [ "python", "docker_files/app.py" ]
+CMD [ "python", "app.py" ]
