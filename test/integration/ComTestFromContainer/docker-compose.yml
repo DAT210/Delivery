@@ -5,9 +5,21 @@ services:
     build: ../../../.
     ports:
       - '4020:80'
+    networks:
+      vpcbr:
+        ipv4_address: 10.2.0.2
 
   test:
     container_name: serviceTester
     build: .
     ports:
       - '4029:80'
+    networks:
+      vpcbr:
+        ipv4_address: 10.2.0.3
+
+networks:
+  vpcbr:
+    ipam:
+     config:
+       - subnet: 10.2.0.0/24
