@@ -1,4 +1,5 @@
-CREATE DATABASE IF NOT EXISTS testdb;
+DROP DATABASE IF EXISTS testdb;
+CREATE DATABASE testdb;
 USE testdb;
 
 DROP TABLE IF EXISTS transport;
@@ -12,6 +13,10 @@ CREATE TABLE transport (
 INSERT INTO transport VALUES 
 (1, "BIKE", 40),
 (2, "BIKE", 45),
-(3, "TAXI", 20);
+(3, "TAXI", 20),
+(4, "HELICOPTER", 10),
+(5, "DRONE", 15),
+(6, "TAXI", 20),
+(7, "DRONE", 15);
 
 
