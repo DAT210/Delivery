@@ -11,6 +11,12 @@ def hello_world():
 
 #TODO: Implement functioncalls depending on routes and content of http requests
 
+@app.route('/ETA', methods=["POST"])
+def handleETArequest():
+    print(request.data)
+
+
+
 
 
 
@@ -47,4 +53,4 @@ def testingpost():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=80)
+    app.run(debug=True, host='0.0.0.0', port=)
