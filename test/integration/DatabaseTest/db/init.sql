@@ -1,0 +1,18 @@
+
+CREATE DATABASE IF NOT EXISTS testdb);
+USE testdb;
+
+DROP TABLE IF EXISTS transport;
+
+CREATE TABLE transport (
+    tid INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    vehicle VARCHAR(255) NOT NULL,
+    ETA FLOAT
+);
+
+INSERT INTO transport VALUES 
+(1, "BIKE", 40),
+(2, "BIKE", 45),
+(3, "TAXI", 20);
+
+
