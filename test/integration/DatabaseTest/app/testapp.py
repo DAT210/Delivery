@@ -1,4 +1,4 @@
-from flask import Flask, request, g
+from flask import Flask, g
 import mysql.connector
 import json
 
@@ -22,18 +22,17 @@ def get_db():
 
 @app.route('/')
 def db_test():
-    data = []
     db = get_db()
     cur = db.cursor()
     try:
-        cur.execute("Select tid, vehicle, ETA from transport")
+        cur.execute("SELECT tid, vehicle, ETA FROM ")
+        data = []
         for tid, vehicle, ETA in cur:
             data.append({
                 "tid": tid,
                 "vehicle": vehicle,
                 "ETA": ETA
             })
-        cur.close()
         return json.dumps(data)
     except mysql.connector.Error:
         return False
