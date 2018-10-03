@@ -25,7 +25,7 @@ def db_test():
     db = get_db()
     cur = db.cursor()
     try:
-        cur.execute("SELECT tid, vehicle, ETA FROM ")
+        cur.execute("SELECT tid, vehicle, ETA FROM transport")
         data = []
         for tid, vehicle, ETA in cur:
             data.append({
@@ -34,6 +34,40 @@ def db_test():
                 "ETA": ETA
             })
         return json.dumps(data)
+    except mysql.connector.Error:
+        return False
+    finally:
+        cur.close()
+
+############ TESTING #############
+
+@app.route('/getETA/<id>', methods=["GET"])
+def getETA(id):
+    db = get_db()
+    cur = db.cursor()
+    sql = "SELECT vehicle, ETA FROM transport WHERE tid={}".format(id)
+    try:
+        cur.execute(sql)
+        row = cur.fetchone()
+        return json.dumps(row)
+    except mysql.connector.Error:
+        return False
+    finally:
+        cur.close()
+
+@app.route('/getVehicles')
+def getVehicles():
+    db = get_db()
+    cur = db.cursor()
+    try:
+        sql = "SELECT DISTINCT(vehicle) FROM transport"
+        cur.execute(sql)
+        vehicles = []
+        for vehicle in cur:
+            vehicles.append({
+                "vehicle": vehicle
+            })
+        return json.dumps(vehicles)
     except mysql.connector.Error:
         return False
     finally:
