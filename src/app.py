@@ -1,37 +1,32 @@
 from flask import Flask, request
 from flask_cors import CORS
 from flask_restful import Resource, Api
-import json, requests
-
+import json
+import requests
 app = Flask(__name__)
 api = Api(app)
-CORS(app) #Makes it possible to send POST requests from javascript outside this service.
-
-app.config["GOOGLE_MAPS_API_KEY"] = "AIzaSyA-z2Kd25PFPMs3gCSpC6bzPBazgSWtLGY"
-app.config["GOOGLE_MAPS_API_URL"] = "https://maps.googleapis.com/maps/api/directions/json?"
-app.config["ORIGIN_ADDRESS"] = "Sandnes"
-app.config["TRANSPORT_METHODS"] = ["driving", "walking", "transit"]
-
-class ETA(Resource):
-    def get(self, addr):
-        response = {}
-        for t_m in app.config["TRANSPORT_METHODS"]:
-            request_url = app.config["GOOGLE_MAPS_API_URL"] + "origin={}&destination={}&mode={}&key={}".format(app.config["ORIGIN_ADDRESS"], addr, t_m, app.config["GOOGLE_MAPS_API_KEY"])
-            content = json.loads(requests.get(request_url).content)
-            distance = content["routes"][0]["legs"][0]["distance"]["text"]
-            duration = content["routes"][0]["legs"][0]["duration"]["text"]
-
-            # Geocode status (Checks if origin and destination locations are valid)
-            # status_location1, status_location2 = content["geocoded_waypoints"][0]["geocoder_status"], content["geocoded_waypoints"][1]["geocoder_status"] 
-
-            response[t_m] = {
-                "Distance": distance,
-                "ETA": duration,
-            }
-        return response
-
-api.add_resource(ETA, '/delivery/eta/address=<addr>')
+# Makes it possible to send POST requests from javascript outside this service.
+CORS(app)
 
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=80)
+@app.route('/')
+def hello_world():
+    return 'Hello World! We have Flask in a Docker container!'
+    #TODO: Implement functioncalls depending on routes and content of http requests
+ ###########################################################################
+##########Just for testing#################################################
+
+@app.route("/testing")
+def testing():
+    return 'Yes, you got here'
+
+@app.route("/testingget", methods=["GET"])
+def testingget():
+    return 'Yes, you got here with the text: ' + request.args.get("test")
+@app.route("/testingpost", methods=["POST"])
+def testingpost():
+    testvalue = "Nothing"
+    if "aKey" in request.form :
+        testvalue = request.form["aKey"]
+    
+    return "you got here " + testvalue
