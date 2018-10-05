@@ -12,8 +12,13 @@ CORS(app)
 @app.route('/')
 def hello_world():
     return 'Hello World! We have Flask in a Docker container!'
-    #TODO: Implement functioncalls depending on routes and content of http requests
- ###########################################################################
+
+#TODO: Implement functioncalls depending on routes and content of http requests
+
+@app.route('/ETA', methods=["POST"])
+def handleETArequest():
+    print(request.data)
+
 ##########Just for testing#################################################
 
 @app.route("/testing")
@@ -28,5 +33,8 @@ def testingpost():
     testvalue = "Nothing"
     if "aKey" in request.form :
         testvalue = request.form["aKey"]
-    
-    return "you got here " + testvalue
+    return "you got here " + testvalue 
+
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=)
