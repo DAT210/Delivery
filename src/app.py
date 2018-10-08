@@ -1,10 +1,8 @@
 from flask import Flask, request
 from flask_cors import CORS
-from flask_restful import Resource, Api
 import json
 import requests
 app = Flask(__name__)
-api = Api(app)
 # Makes it possible to send POST requests from javascript outside this service.
 CORS(app)
 
@@ -16,8 +14,16 @@ def hello_world():
 #TODO: Implement functioncalls depending on routes and content of http requests
 
 @app.route('/ETA', methods=["POST"])
-def handleETArequest():
-    print(request.data)
+def handleETA_POSTrequest():
+    global datadict
+    data = request.data
+    datadict = json.loads(data)
+    return "OK"
+
+@app.route('/ETA', methods=["GET"])
+def handleETA_GETrequest():
+    global datadict
+    return "The received data: " + str(datadict)
 
 ##########Just for testing#################################################
 
@@ -37,4 +43,4 @@ def testingpost():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=)
+    app.run(debug=True, host='0.0.0.0', port=80)
