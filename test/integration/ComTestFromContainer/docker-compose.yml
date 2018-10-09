@@ -11,3 +11,7 @@ services:
     build: .
     ports:
       - '4029:80'
+    links:
+      - app:delapp
+
+
