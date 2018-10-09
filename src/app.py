@@ -13,15 +13,7 @@ def hello_world():
 
 #TODO: Implement functioncalls depending on routes and content of http requests
 
-@app.route('/ETA', methods=["POST"])
-def handleETA_POSTrequest():
-    data = json.loads(request.data)
-    street = data["adress"]["street"]
-    street_nr = data["adress"]["street_nr"]
-    postal = data["adress"]["postal_code"]
-    URL = "http://127.0.0.1:1337/delivery/eta?address=" + street + "+" + street_nr + "+" postal
-    r = requests.get(URL)
-    return r.content
+
 
 
 ##########Just for testing#################################################
