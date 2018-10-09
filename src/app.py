@@ -15,15 +15,14 @@ def hello_world():
 
 @app.route('/ETA', methods=["POST"])
 def handleETA_POSTrequest():
-    global datadict
-    data = request.data
-    datadict = json.loads(data)
-    return "OK"
+    data = json.loads(request.data)
+    street = data["adress"]["street"]
+    street_nr = data["adress"]["street_nr"]
+    postal = data["adress"]["postal_code"]
+    URL = "http://127.0.0.1:1337/delivery/eta?address=" + street + "+" + street_nr + "+" postal
+    r = requests.get(URL)
+    return r.content
 
-@app.route('/ETA', methods=["GET"])
-def handleETA_GETrequest():
-    global datadict
-    return "The received data: " + str(datadict)
 
 ##########Just for testing#################################################
 
@@ -43,4 +42,4 @@ def testingpost():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=80)
+    app.run(debug=True, host='127.0.0.1', port=6969)

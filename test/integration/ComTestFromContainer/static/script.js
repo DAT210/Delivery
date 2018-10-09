@@ -23,15 +23,6 @@ $(document).ready(function() {
         $("#routewithpostform").submit(testPOST(containerAddress, "/testingpost", $('#routewithpostform').serialize()));
     })
 
-    //Hardkoding fungere fint på min men ikke på din. Mads.
-    $("#ETAtest").click (function(){
-        var containerAddress = "http://127.0.0.1:4040";
-        console.log(containerAddress)
-        window.open(containerAddress+ "/sendtestdataETA", '_blank');
-        window.open("http://192.168.99.100:4020/ETA", '_blank')
-    })
-
-
 });
 function testPOST(containerAddress, path, indata){
     $.ajax({

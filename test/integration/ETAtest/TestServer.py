@@ -9,20 +9,16 @@ CORS(app)
 
 API_ENDPOINT = "http://192.168.99.100:4020/ETA"
 
-testData = {'sender': 'Alice', 
-    'receiver': 'Bob', 
-    'message': 'We did it!'}
-
 headerr = {'Content-Type': 'application/json'}
 
-# testData.append({
-#     "c_id": 1,
-#     "address":{
-#         "street": "Varaberget",
-#         "street_nr": 18,
-#         "postal_code": 4046
-#     }
-# })
+testData = ({
+    "c_id": 1,
+    "address":{
+        "street": "Gauselarmen",
+        "street_nr": "14B",
+        "postal_code": 4032
+    }
+})
 
 @app.route("/")
 def index():
@@ -32,7 +28,7 @@ def index():
 def sendtestdataETA():
     print("Hei")
     r = requests.post(url = API_ENDPOINT, json=json.dumps(testData), headers=headerr)
-    return "Sending data: Status code: " + str(r.status_code)
+    return "Sending data: Status code: " + str(r.status_code) + " " + r.text
 
 
 if __name__ == '__main__':
