@@ -18,11 +18,15 @@ class methods_eta(Resource):
         response = {}
 
         for method in app.config["TRANSPORT_METHODS"]:
-            best_route = route.Route(destination_address, method)
-
+            try:
+                best_route = route.Route(destination_address, method)
+            except ValueError:
+                return abort(400)
+            
             response[method] = {
                 "eta": best_route.total_duration,
-                "distance": best_route.total_distance
+                "distance": best_route.total_distance,
+                "price": best_route.total_price
             }
 
         return response

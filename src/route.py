@@ -8,6 +8,7 @@ class Route:
     waypoints = {}
     total_duration = 0
     total_distance = 0
+    total_price = 0
 
     def __init__(self, destination, mode, origin='Sandnes'):
         self.origin = origin
@@ -18,6 +19,7 @@ class Route:
         if self._error_check():
             self._init_total_eta_and_distance()
             self._collect_waypoints()
+            self._calculate_price()
     
 
 
@@ -48,4 +50,34 @@ class Route:
                 raise ValueError("Address is not valid: {}".format(waypoint["geocoder_status"]))
 
         return True
+
+
+    def _calculate_price(self):
+        price_base = {
+            "driving": {
+                "start_price": 30,
+                "time_price": 175,
+                "km_price": 4
+            },
+            "walking": {
+                "start_price": 15,
+                "time_price": 150,
+                "km_price": 40
+            },
+            "transit": {
+                "start_price": 20,
+                "time_price": 150,
+                "km_price": 10
+            }
+        }
+
+        start_price = price_base[self.mode]["start_price"]
+        time_price = price_base[self.mode]["time_price"]
+        km_price = price_base[self.mode]["km_price"]
+
+        self.total_price = start_price + time_price*(self.total_duration/60) + km_price*self.total_distance
+
+
+        
+
                 
