@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, url_for
+from flask import Flask, request, render_template, url_for, flash
 from flask_cors import CORS
 from flask_restful import Resource, Api
 from flask_bootstrap import Bootstrap

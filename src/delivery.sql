@@ -6,12 +6,14 @@ DROP TABLE IF EXISTS delivery;
 
 CREATE TABLE delivery (
     did INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    aid INT NOT NULL,
     order_id INT NOT NULL,
     customer_id INT NOT NULL,
     price INT NOT NULL,
     vehicle VARCHAR(255) NOT NULL,
     order_delivered DATETIME,
-    order_ready DATETIME
+    order_ready DATETIME,
+    FOREIGN KEY (aid) REFERENCES _address(aid)
 
 );
 
