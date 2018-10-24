@@ -2,14 +2,13 @@ var geoResults = {};
 var geocoder;
 var map;
 var searchResults = [];
+var markers = [];
 var startAddr = "Gauselarmen 14";
 var endAddr = "Gamle austråttvei 14";
 var directionsDisplay;
-var directionsService = new google.maps.DirectionsService();
+var directionsService;
 
 function initMap() {
-    directionsService = new google.maps.DirectionsService();
-    directionsDisplay = new google.maps.DirectionsRenderer();
     geocoder = new google.maps.Geocoder();
     var latlng = new google.maps.LatLng(-34.397, 150.644)
     var myOptions = {
@@ -17,11 +16,8 @@ function initMap() {
         center: latlng,
     }
     map = new google.maps.Map(document.getElementById('map'), myOptions);
-    directionsDisplay.setMap(map);
     geocodeAddress(startAddr);
     geocodeAddress(endAddr);
-    console.log(searchResults)
-
 }
 
 function geocodeAddress(address) {
@@ -32,8 +28,14 @@ function geocodeAddress(address) {
                 map: map,
                 position: results[0].geometry.location
             });
-
             searchResults[address] = results[0].geometry.location;
+            markers.push(marker);
+            if (markers.length == 2) {
+                directionsService = new google.maps.DirectionsService();
+                directionsDisplay = new google.maps.DirectionsRenderer();
+                directionsDisplay.setMap(map);
+                calculateAndDisplayRoute(directionsService, directionsDisplay);
+            }
         }else {
             alert("Geocode was not successful for the following reason: " + status);
         }
@@ -41,8 +43,6 @@ function geocodeAddress(address) {
 }
 
 function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-    console.log(searchResults)
-    console.log(searchResults.startAddr)
     directionsService.route({
         origin: searchResults[startAddr],
         destination: searchResults[endAddr],
