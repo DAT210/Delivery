@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, url_for
+from flask import Flask, request, render_template, url_for, flash
 from flask_cors import CORS
 from flask_restful import Resource, Api
 import json
@@ -7,6 +7,9 @@ import requests
 
 app = Flask(__name__)
 api = Api(app)
+
+app.config["SECRET_KEY"] = "mysecret"
+
 # Makes it possible to send POST requests from javascript outside this service.
 CORS(app)
 
@@ -16,6 +19,32 @@ def index():
     percent = "50"
     # TODO hent inn data fra database
     return render_template("index.html", percent=percent)
+
+
+@app.route('/')
+def delivery():
+    eta = 20
+    percent = 0
+    flash("ETA is " + str(eta) + " minutes")
+    return render_template("index.html", eta=eta, percent=percent)
+
+
+@app.route('/1')
+def deliver1():
+    eta = 10
+    percent = 50
+    flash("ETA is " + str(eta) + " minutes")
+    return render_template("index.html", eta=eta, percent=percent)
+
+
+@app.route('/2')
+def delivery2():
+    eta = 2
+    percent = round(((20-eta)/20)*100)
+    flash("ETA is " + str(eta) + " minutes")
+    return render_template("test.html", eta=eta, percent=percent)
+
+
 
 
 ########################### DELIVERY UI #################################
