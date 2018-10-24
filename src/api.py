@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, make_response
 from flask_cors import CORS
 from flask_restful import Resource, Api, abort
 import json, requests, sys, logging, time, route
@@ -20,8 +20,8 @@ class methods_eta(Resource):
         for method in app.config["TRANSPORT_METHODS"]:
             try:
                 best_route = route.Route(destination_address, method)
-            except ValueError:
-                return abort(400)
+            except ValueError as e:
+                return make_response(json.dumps({'message': e.args[0]}), 400)
             
             response[method] = {
                 "eta": best_route.total_duration,

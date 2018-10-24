@@ -35,6 +35,8 @@ class Route:
     def _init_total_eta_and_distance(self):
         # This can be expanded to allow alternate routes
         self.total_distance = self.json_directions["routes"][0]["legs"][0]["distance"]["value"]/1000  # Convert to KM
+        if self.total_distance > 30:
+            raise ValueError("Can't deliver over 30 km")
         self.total_duration = self.json_directions["routes"][0]["legs"][0]["duration"]["value"]/60  # Convert to minutes
 
     
