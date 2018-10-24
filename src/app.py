@@ -1,18 +1,26 @@
-from flask import Flask, request
+from flask import Flask, request, render_template, url_for
 from flask_cors import CORS
+from flask_restful import Resource, Api
 import json
 import requests
+
+
 app = Flask(__name__)
+api = Api(app)
 # Makes it possible to send POST requests from javascript outside this service.
 CORS(app)
 
+########################### DELIVERY UI #################################
+@app.route('/delivery')
+def index():
+    percent = "50"
+    # TODO hent inn data fra database
+    return render_template("index.html", percent=percent)
 
-@app.route('/')
-def hello_world():
-    return 'Hello World! We have Flask in a Docker container!'
+
+########################### DELIVERY UI #################################
 
 #TODO: Implement functioncalls depending on routes and content of http requests
-
 
 
 
