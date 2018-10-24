@@ -1,0 +1,352 @@
+{
+	"info": {
+		"_postman_id": "2a8d0077-2862-4d96-8e7c-a68dc1ef080a",
+		"name": "Delivery API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Full address, space=+",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "750a77f3-2268-405e-8f6c-efb79e7bf5d5",
+						"exec": [
+							"pm.test(\"Status code is 2xx\", function () {",
+							"    pm.response.to.be.success;",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response have body\", function() {",
+							"   pm.response.to.be.withBody;",
+							"});",
+							"",
+							"pm.test(\"Response is json\", function() {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"var schema = {   ",
+							"    \"description\": \"ETA response\",",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"driving\": {",
+							"            \"type\": \"object\",",
+							"            \"properties\": {",
+							"                \"eta\": {\"type\": \"number\"},",
+							"                \"distance\": {\"type\": \"number\"},",
+							"                \"price\": {\"type\": \"number\"}",
+							"            }",
+							"        },",
+							"        \"walking\": {",
+							"            \"type\": \"object\",",
+							"            \"properties\": {",
+							"                \"eta\": {\"type\": \"number\"},",
+							"                \"distance\": {\"type\": \"number\"},",
+							"                \"price\": {\"type\": \"number\"}",
+							"            }",
+							"        },",
+							"        \"transit\": {",
+							"            \"type\": \"object\",",
+							"            \"properties\": {",
+							"                \"eta\": {\"type\": \"number\"},",
+							"                \"distance\": {\"type\": \"number\"},",
+							"                \"price\": {\"type\": \"number\"}",
+							"            }",
+							"        }",
+							"    },",
+							"};",
+							"",
+							"var schema1 = pm.environment.get(\"test\");",
+							"pm.test('Schema is valid', function() {",
+							"    var data = pm.response.json();",
+							"    var r = tv4.validate(data, schema, false, true);",
+							"    pm.expect(r).to.be.true;",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://127.0.0.1:1337/delivery/methods/eta?address=admiral+hammerichs+vei+18b",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "1337",
+					"path": [
+						"delivery",
+						"methods",
+						"eta"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "admiral+hammerichs+vei+18b"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Full address, space=%20",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cb1a53ba-546c-40b5-a466-2197254ad634",
+						"exec": [
+							"pm.test(\"Status code is 2xx\", function () {",
+							"    pm.response.to.be.success;",
+							"    console.log(pm.response.body);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response have body\", function() {",
+							"   pm.response.to.be.withBody;",
+							"});",
+							"",
+							"pm.test(\"Response is json\", function() {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"var schema = {   ",
+							"    \"description\": \"ETA response\",",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"driving\": {",
+							"            \"type\": \"object\",",
+							"            \"properties\": {",
+							"                \"eta\": {\"type\": \"number\"},",
+							"                \"distance\": {\"type\": \"number\"},",
+							"                \"price\": {\"type\": \"number\"}",
+							"            }",
+							"        },",
+							"        \"walking\": {",
+							"            \"type\": \"object\",",
+							"            \"properties\": {",
+							"                \"eta\": {\"type\": \"number\"},",
+							"                \"distance\": {\"type\": \"number\"},",
+							"                \"price\": {\"type\": \"number\"}",
+							"            }",
+							"        },",
+							"        \"transit\": {",
+							"            \"type\": \"object\",",
+							"            \"properties\": {",
+							"                \"eta\": {\"type\": \"number\"},",
+							"                \"distance\": {\"type\": \"number\"},",
+							"                \"price\": {\"type\": \"number\"}",
+							"            }",
+							"        }",
+							"    },",
+							"};",
+							"",
+							"var schema1 = pm.environment.get(\"test\");",
+							"pm.test('Schema is valid', function() {",
+							"    var data = pm.response.json();",
+							"    var r = tv4.validate(data, schema, false, true);",
+							"    pm.expect(r).to.be.true;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:1337/delivery/methods/eta?address=admiral%20hammerichs%20vei%2018b",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "1337",
+					"path": [
+						"delivery",
+						"methods",
+						"eta"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "admiral%20hammerichs%20vei%2018b"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f45f0eab-159a-4d4e-8938-5929e49d6dc8",
+						"exec": [
+							"pm.test(\"Status code is 4xx\", function () {",
+							"    pm.response.to.be.clientError;",
+							"});",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response message\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message !== null).to.be.true;",
+							"});",
+							"",
+							"pm.test(\"Response message\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Destination address is empty.\");",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://127.0.0.1:1337/delivery/methods/eta",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "1337",
+					"path": [
+						"delivery",
+						"methods",
+						"eta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Corrupt address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a5f5207d-15db-4679-8371-339532259fa3",
+						"exec": [
+							"pm.test(\"Status code is 4xx\", function () {",
+							"    pm.response.to.be.clientError;",
+							"});",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response message\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message !== null).to.be.true;",
+							"});",
+							"",
+							"pm.test(\"Response message\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Address is not valid: ZERO_RESULTS\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:1337/delivery/methods/eta?address=hasfjhsdfgwiafjkasebcsjha",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "1337",
+					"path": [
+						"delivery",
+						"methods",
+						"eta"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "hasfjhsdfgwiafjkasebcsjha"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "1b19795e-4a32-4a7d-9288-3fb043f90613",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "c58a4f37-3d81-4843-9bcb-c0e5ce2ea238",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "33162346-622f-4d56-98e3-25900e81286f",
+			"key": "deliverySchema",
+			"value": "{ \n  \"description\": \"ETA response\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"driving\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"eta\": {\"type\": \"number\"},\n            \"distance\": {\"type\": \"number\"},\n            \"price\": {\"type\": \"number\"}\n        }\n    },\n     \"walking\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"eta\": {\"type\": \"number\"},\n            \"distance\": {\"type\": \"number\"},\n            \"price\": {\"type\": \"number\"}\n        }\n    },\n     \"transit\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"eta\": {\"type\": \"number\"},\n            \"distance\": {\"type\": \"number\"},\n            \"price\": {\"type\": \"number\"}\n        }\n    }\n  },\n};",
+			"type": "string"
+		}
+	]
+}
