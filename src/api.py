@@ -1,7 +1,7 @@
-from flask import Flask, request
+from flask import Flask, request, make_response
 from flask_cors import CORS
-from flask_restful import Resource, Api
-import json, requests
+from flask_restful import Resource, Api, abort
+import json, requests, sys, logging, time, route
 
 app = Flask(__name__)
 api = Api(app)
@@ -12,28 +12,28 @@ app.config["GOOGLE_MAPS_API_URL"] = "https://maps.googleapis.com/maps/api/direct
 app.config["ORIGIN_ADDRESS"] = "Sandnes"
 app.config["TRANSPORT_METHODS"] = ["driving", "walking", "transit"]
 
-
-class ETA(Resource):
+class methods_eta(Resource):
     def get(self):
+        destination_address = request.args.get('address')
         response = {}
-        addr = request.args.get('address')
-        for t_m in app.config["TRANSPORT_METHODS"]:
-            request_url = app.config["GOOGLE_MAPS_API_URL"] + "origin={}&destination={}&mode={}&key={}".format(app.config["ORIGIN_ADDRESS"], addr, t_m, app.config["GOOGLE_MAPS_API_KEY"])
-            content = json.loads(requests.get(request_url).content)
-            distance = content["routes"][0]["legs"][0]["distance"]["text"]
-            duration = content["routes"][0]["legs"][0]["duration"]["text"]
 
-            # Geocode status (Checks if origin and destination locations are valid)
-            # status_location1, status_location2 = content["geocoded_waypoints"][0]["geocoder_status"], content["geocoded_waypoints"][1]["geocoder_status"] 
-
-            response[t_m] = {
-                "distance": distance,
-                "eta": duration
+        for method in app.config["TRANSPORT_METHODS"]:
+            try:
+                best_route = route.Route(destination_address, method)
+            except ValueError as e:
+                return make_response(json.dumps({'message': e.args[0]}), 400)
+            
+            response[method] = {
+                "eta": best_route.total_duration,
+                "distance": best_route.total_distance,
+                "price": best_route.total_price
             }
-        return response
 
-api.add_resource(ETA, '/delivery/eta')
+        return response
+    
+
+api.add_resource(methods_eta, '/delivery/methods/eta')
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=80)
+    app.run(debug=True, host='127.0.0.1', port=1337)

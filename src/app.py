@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template, url_for, flash
 from flask_cors import CORS
 from flask_restful import Resource, Api
-from flask_bootstrap import Bootstrap
 import json
 import requests
 
@@ -11,8 +10,6 @@ api = Api(app)
 
 app.config["SECRET_KEY"] = "mysecret"
 
-# Makes it easy to implement boostrap
-Bootstrap(app)
 # Makes it possible to send POST requests from javascript outside this service.
 CORS(app)
 
@@ -55,9 +52,6 @@ def delivery2():
 #TODO: Implement functioncalls depending on routes and content of http requests
 
 
-@app.route('/ETA', methods=["POST"])
-def handleETArequest():
-    print(request.data)
 
 ##########Just for testing#################################################
 
@@ -77,4 +71,4 @@ def testingpost():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1', port=6969)
