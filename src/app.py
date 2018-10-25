@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask_restful import Resource, Api
 import json
 import requests
+from deliveryDB import Database
 
 
 app = Flask(__name__)
@@ -10,8 +11,28 @@ api = Api(app)
 
 app.config["SECRET_KEY"] = "mysecret"
 
+# Pass inn app.config if you wat to use the database class
+app.config["DATABASE_USER"] = "root"
+app.config["DATABASE_PASSWORD"] = "root"
+app.config["DATABASE_DB"] = "delivery"
+app.config["DATABASE_HOST"] = "db"
+app.config["DATABASE_PORT"] = "3306"
+
 # Makes it possible to send POST requests from javascript outside this service.
 CORS(app)
+
+
+########################### DATABASE EXAMPLE #################################
+
+@app.route('/dbtest')
+def dbtest():
+    # pass inn config
+    newDb = Database(app.config)
+
+    return 
+
+###########################        END       #################################
+
 
 ########################### DELIVERY UI #################################
 @app.route('/delivery')
