@@ -55,37 +55,3 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
         }
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-    // map = new google.maps.Map(
-    //     document.getElementById('map'),
-    //     {
-    //         zoom: 4,
-    //         center: start_location
-    //     });
-    // var marker = new google.maps.Marker(
-    //     {
-    //         position: start_location,
-    //         map: map
-    //     });
-
-
-    //     zoom: 8,
-    //     center: { lat: -34.394, lng: 150.644 },
-    //     // Instantiate a directions service.
-    //     directionsService = new google.maps.DirectionsService,
-    //     directionsDisplay = new google.maps.DirectionsRenderer({
-    //         map: map,
-
-    // get route from start to end
-    // calculateAndDisplayRoute(directionsService, directionsDisplay, start, end)
-
