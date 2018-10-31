@@ -27,15 +27,15 @@ class Database:
         try:
             cur.execute(sql)
             data = []
-            for aid, city, postcode, street, street_number, house_number in cur:
+            for did, aid, order_id, customer_id, price, vehicle, order_delivered, order_ready in cur:
                 data.append({
                     "did": did,
                     "aid": aid,
                     "order_id": order_id,
                     "customer_id": customer_id,
                     "price": price,
-                    "vehicle": vehicle
-                    "order_delivered": order_delivered
+                    "vehicle": vehicle,
+                    "order_delivered": order_delivered,
                     "order_ready": order_ready
                 })
             return json.dumps(data)
@@ -83,16 +83,16 @@ class Database:
     # 4. method insert into delivery
     # pass inn ann array containing all six fields
     def insert_address(self, data):
-    cur = self.db.cursor()
-    sql = "INSERT INTO _address VALUES ({}, {}, {}, {}, {}, {})" \
-        .format(data[0], data[1], data[2], data[3], data[4], data[5])
-    try:
-        cur.execute(sql)
-        return True
-    except mysql.connector.Error:
-        return False
-    finally:
-        cur.close()
+        cur = self.db.cursor()
+        sql = "INSERT INTO _address VALUES ({}, {}, {}, {}, {}, {})" \
+            .format(data[0], data[1], data[2], data[3], data[4], data[5])
+        try:
+            cur.execute(sql)
+            return True
+        except mysql.connector.Error:
+            return False
+        finally:
+            cur.close()
 
         
 
