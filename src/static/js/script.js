@@ -11,11 +11,12 @@ var directionsService;
 
 $(function(){
     setInterval(function () {
+        // path = /delivery/id/map
         var url = window.location.pathname;
-        var id = url.substring(url.lastIndexOf('/') + 1);
+        var id = url.split("/")[2];
         $.ajax({
             type: "GET",
-            url: "/delivery/eta/" + id,
+            url: "/delivery/" + id + "/eta",
             dataType: "json",
             success: function (response) {
                 setNewMarker(response.lat, response.lng);
@@ -25,7 +26,7 @@ $(function(){
             console.log(error)
             }
         });
-    }, 5000);
+    }, 2000);
 
 });
 
@@ -53,24 +54,16 @@ function removePrevMarker() {
 // fikse slik at den første også blir et icon
 // fikse slik at destinasjonsadressen er et målflagg og ikke flytter på seg
 
-var markerIcon = {
-    url: 'car.svg',
-    scaledSize: new google.maps.Size(60, 60),
-    origin: new google.maps.Point(0, 0), // used if icon is a part of sprite, indicates image position in sprite
-    anchor: new google.maps.Point(20, 40) // lets offset the marker image
-};
 
 function setNewMarker(lat, lng){
     // var image = "http://image.flaticon.com/icons/svg/252/252025.svg"
     var latlng = new google.maps.LatLng(lat, lng);
     searchResults.push(latlng)
     var marker = new google.maps.Marker({
-        icon: markerIcon,
         map: map,
         position: latlng,
     });
     markers.push(marker);
-    console.log(markers.length)
     removePrevMarker();
 
     // console.log(markers.length)

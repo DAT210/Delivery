@@ -57,8 +57,7 @@ class methods_eta(Resource):
 
         return response
 
-
-#TODO fetch job from available jobs in db
+#TODO fetch job from available jobs in cache
 #For now i just use a static list of orders.
 class delivery_client_getjob(Resource):
     def get(self):
@@ -70,13 +69,13 @@ class delivery_client_getjob(Resource):
 
 
 
-class delivery_client_update(Resource):
-    def get(self):
-        lat = request.args.get('lat')
-        lng = request.args.get('lng')
-        order = request.args.get('orderid')
-        print("Got new updates:\nOrder: {}\nLat: {}, Lng: {}".format(order, lat, lng))
-    #TODO send coordinate updates to correct order and update map
+# class delivery_client_update(Resource):
+#     def get(self):
+#         lat = request.args.get('lat')
+#         lng = request.args.get('lng')
+#         order = request.args.get('orderid')
+#         print("Got new updates:\nOrder: {}\nLat: {}, Lng: {}".format(order, lat, lng))
+#     #TODO send coordinate updates to correct order and update map
     
 
 class order_eta(Resource):
@@ -131,7 +130,7 @@ class update_eta(Resource):
 
 api.add_resource(methods_eta, '/delivery/methods/eta')
 api.add_resource(delivery_client_getjob, '/delivery/client/job')
-api.add_resource(delivery_client_update, '/delivery/client/update')
+# api.add_resource(delivery_client_update, '/delivery/client/update')
 api.add_resource(update_eta, '/delivery/<int:order_id>/eta')
 api.add_resource(order_eta, '/delivery/<int:order_id>/coord')
 api.add_resource(new_order, '/delivery/neworder')  # POST REQ

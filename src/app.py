@@ -37,12 +37,12 @@ def dbtest():
 ########################### DELIVERY UI #################################
 
 # hmmmmmmmmm! http://localhost:6969/delivery/1/delivery//eta
-@app.route('/delivery/map/<int:order_id>')
+@app.route('/delivery/<int:order_id>/map')
 def index(order_id):
     return render_template("index.html")
 
 i = 0
-@app.route('/delivery/eta/<int:order_id>')
+@app.route('/delivery/<int:order_id>/eta')
 def eta(order_id):
     global i
     if (i == 0):
