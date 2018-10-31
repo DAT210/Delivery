@@ -35,11 +35,32 @@ def dbtest():
 
 
 ########################### DELIVERY UI #################################
-@app.route('/delivery')
-def index():
-    percent = "50"
-    # TODO hent inn data fra database
-    return render_template("index.html", percent=percent)
+
+# hmmmmmmmmm! http://localhost:6969/delivery/1/delivery//eta
+@app.route('/delivery/map/<int:order_id>')
+def index(order_id):
+    return render_template("index.html")
+
+i = 0
+@app.route('/delivery/eta/<int:order_id>')
+def eta(order_id):
+    global i
+    if (i == 0):
+        data = {"lat": 58.847426, "lng": 5.7535204,
+                 "eta": {"text": "12min", "val": 123123}}
+        i += 1
+    elif (i==1):
+        data = {"lat": 58.867426, "lng": 5.7535204,
+                "eta": {"text": "12min", "val": 123123}}
+        i += 1
+    elif (i == 2):
+        data = {"lat": 58.887426, "lng": 5.7535204,
+                "eta": {"text": "12min", "val": 123123}}
+        i += 1
+    else:
+        data = {"lat": 58.897426, "lng": 5.7535204,
+                "eta": {"text": "12min", "val": 123123}}
+    return json.dumps(data)
 
 
 @app.route('/')

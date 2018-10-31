@@ -14,6 +14,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark border justify-content-center p-3">
         <a class="navbar-brand" href="#">
             <h2>Delivery</h2>
+            <i id="order-id">{{ id }}</i>
+            <p>{{ json }}</p>
         </a>
     </nav>
     {% endblock %}
@@ -36,9 +38,9 @@
                     {% endif %}
                     {% endwith %}
                 <div class="progress">
-                    <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: {{percent}}%;" aria-valuenow="{{percent}}"
+                    <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: 10%;" aria-valuenow="{{percent}}"
                         aria-valuemin="0" aria-valuemax="100">
-                        <small class="justify-content-center d-flex position-absolute w-100 text-dark"> {{percent}}% complete</small>
+                        <small class="justify-content-center d-flex position-absolute w-100 text-dark">complete</small>
                     </div>
                 </div>
             </div>
