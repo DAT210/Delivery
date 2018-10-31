@@ -12,7 +12,31 @@ app.config["GOOGLE_MAPS_API_URL"] = "https://maps.googleapis.com/maps/api/direct
 app.config["ORIGIN_ADDRESS"] = "Sandnes"
 app.config["TRANSPORT_METHODS"] = ["driving", "walking", "transit"]
 
+
+#Temporary until db integration is ok.
+temp_jobs = [{
+        "order_id": 1,
+        "status": "WAITING",
+        "legs": [
+            {
+                "latitude": 58.96627642581798,
+                "longitude": 5.730213685769627,
+                "time": 25
+            },
+            {
+                "latitude": 58.95946134959505,
+                "longitude": 5.734076066751072,
+                "time": 30
+            },                {
+                "latitude": 58.95600904377245,
+                "longitude": 5.735706849832127,
+                "time": 0
+            }
+        ]
+    }]
+
 cache = {} # KEY: order_id, VALUE: Delivery object
+
 
 class methods_eta(Resource):
     def get(self):
@@ -32,6 +56,27 @@ class methods_eta(Resource):
             }
 
         return response
+
+
+#TODO fetch job from available jobs in db
+#For now i just use a static list of orders.
+class delivery_client_getjob(Resource):
+    def get(self):
+        for order in temp_jobs:
+            if order["status"] == "WAITING":
+                order["status"] = "TAKEN"
+                return order
+        return "No jobs available"
+
+
+
+class delivery_client_update(Resource):
+    def get(self):
+        lat = request.args.get('lat')
+        lng = request.args.get('lng')
+        order = request.args.get('orderid')
+        print("Got new updates:\nOrder: {}\nLat: {}, Lng: {}".format(order, lat, lng))
+    #TODO send coordinate updates to correct order and update map
     
 
 class order_eta(Resource):
@@ -85,27 +130,13 @@ class update_eta(Resource):
 
 
 api.add_resource(methods_eta, '/delivery/methods/eta')
+api.add_resource(delivery_client_getjob, '/delivery/client/job')
+api.add_resource(delivery_client_update, '/delivery/client/update')
 api.add_resource(update_eta, '/delivery/<int:order_id>/eta')
 api.add_resource(order_eta, '/delivery/<int:order_id>/coord')
 api.add_resource(new_order, '/delivery/neworder')  # POST REQ
 
 
-# {
-#     "lat": 1,
-#     "long": 2,
-#     "eta": {
-#         "text": "12 min",
-#         "val": 123123  # Seconds
-#     }
-# }
-
-
-# {
-#     "order_id": id,
-#     "delivery_method": method,
-#     "address": "address"
-#     "abortet": False
-# }
 
 
 if __name__ == '__main__':
