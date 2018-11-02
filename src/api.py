@@ -105,6 +105,7 @@ class new_order(Resource):
             return "Order aborted"
         else:
             new_delivery = delivery.Delivery(delivery_method, address, order_id, "Recieved")
+            cache[order_id] = new_delivery
 
 
         return "SUCCESS: ORDER {} CREATED".format(order_id)

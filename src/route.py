@@ -28,12 +28,12 @@ class Route:
         self.waypoints = self.json_directions["routes"][0]["legs"][0]["steps"]
 
     def _collect_directions(self, origin, destination, mode):
-        # Edit this to allow lat/long and address
+        payload = {"origin": origin, "destination", destination, "mode": mode, "key": self.__API_KEY}
+
         if origin["lat"]:
-            args = "origin={}&destination={}&mode={}&key={}".format("{},{}".format(origin["lat"], origin["long"]), destination, mode, self.__API_KEY)
-        else:
-            args = "origin={}&destination={}&mode={}&key={}".format(origin, destination, mode, self.__API_KEY)
-        data = requests.get(self.__API_URL + args)
+            payload["origin"] = "{},{}".format(origin["lat"], origin["long"])
+
+        data = requests.get(self.__API_URL, params=payload)
         return json.loads(data.content)
 
     def _init_total_eta_and_distance(self):
