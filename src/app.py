@@ -1,10 +1,10 @@
-from flask import Flask, request, render_template, url_for, flash
+from flask import Flask, request, render_template, url_for, flash, g
 from flask_cors import CORS
 from flask_restful import Resource, Api
 import json
 import requests
 from deliveryDB import Database
-
+import mysql.connector
 
 app = Flask(__name__)
 api = Api(app)
@@ -24,12 +24,37 @@ CORS(app)
 
 ########################### DATABASE EXAMPLE #################################
 
-@app.route('/dbtest')
-def dbtest():
+@app.route('/insert_delivery')
+def insertDelivery():
     # pass inn config
-    newDb = Database(app.config)
+    db = Database(app.config)
+    #did, aid, order_id, customer_id, price, vehicle, order_delivered, order_ready
+    data1 = [1, 1, 1, 1, 59.99, "Car", 0, 0]
+    data2 = [2, 2, 2, 2, 79.99, "Car", 0, 0]
+    db.insert_delivery(data1)
+    return "Inserting delivery into database..."
 
-    return 
+@app.route('/query_delivery')
+def queryDelivery():
+    db = Database(app.config)
+    return db.query_delivery()
+
+@app.route('/query_address')
+def queryAddress():
+    db = Database(app.config)
+    return db.query_address()
+
+@app.route('/insert_address')
+def insertAddress():
+    data1 = [1, 'Sandnes', 4326, 'MyyyyyVeien', 12, '']
+    data2 = [2, 'Stavanger', 4032, 'Gauselarmen', 14, 'B']
+    db = Database(app.config)
+    db.insert_address(data1)
+    return "Inserting address into database..."
+
+
+
+
 
 ###########################        END       #################################
 
