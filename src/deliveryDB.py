@@ -13,7 +13,7 @@ class Database:
             g._database = mysql.connector.connect(
                                                 user=config["DATABASE_USER"],
                                                 password=config["DATABASE_PASSWORD"],
-                                                database=config["DATABASE_DB"],
+                                                database=config["DATABASE_DB"]
                                                 )
         return g._database
 
@@ -45,9 +45,12 @@ class Database:
             cur.close()
 
     # 2. fetch all from (_address)
-    def query_address(self):
+    def query_address(self, id=None):
         cur = self.db.cursor()
-        sql = "SELECT aid, city, postcode, street, street_number, house_number FROM _address"
+        if id != None:
+            sql = "SELECT aid, city, postcode, street, street_number, house_number FROM _address WHERE id={}".format(id)
+        else:  
+            sql = "SELECT aid, city, postcode, street, street_number, house_number FROM _address"
         try:
             cur.execute(sql)
             data = []
@@ -56,7 +59,7 @@ class Database:
                     "aid": aid,
                     "city": city,
                     "postcode": postcode,
-                    "street": str(street),
+                    "street": street,
                     "street_number": street_number,
                     "house_number": house_number
                 })
@@ -66,28 +69,31 @@ class Database:
         finally:
             cur.close()
 
-    # 3. method insert into delivery
+
+    # 4. method insert into delivery
     # pass inn ann array containing all eight fields
     def insert_delivery(self, data):
         cur = self.db.cursor()
-        sql = "INSERT INTO delivery VALUES ({}, {}, {}, {}, {}, {}, {}, {})" \
-        .format(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
+        sql = "INSERT INTO delivery VALUES ({}, {}, {}, {}, {}, '{}', {}, {})".format(
+            data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
         try:
             cur.execute(sql)
-            return True
+            self.db.commit()
+            return sql
         except mysql.connector.Error:
             return False
         finally:
             cur.close()
 
-    # 4. method insert into delivery
+    # 5. method insert into delivery
     # pass inn ann array containing all six fields
     def insert_address(self, data):
         cur = self.db.cursor()
-        sql = "INSERT INTO _address VALUES ({}, {}, {}, {}, {}, {})" \
+        sql = "INSERT INTO _address VALUES ({}, '{}', {}, '{}', {}, '{}')" \
             .format(data[0], data[1], data[2], data[3], data[4], data[5])
         try:
             cur.execute(sql)
+            self.db.commit()
             return True
         except mysql.connector.Error:
             return False
