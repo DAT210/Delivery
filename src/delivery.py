@@ -2,7 +2,7 @@ import geocoder
 
 class Delivery:
 
-    def __init__(self, delivery_method, destination, order_id, status, origin="Sandnes", eta=None):
+    def __init__(self, delivery_method, destination, order_id, status, route, origin="Sandnes", eta=None):
         self.delivery_method = delivery_method
         self.destination = destination
         self.status = status
@@ -10,6 +10,7 @@ class Delivery:
         self.origin = origin
         self.destination_coord = self._get_coordinates(destination)
         self.origin_coord = self._get_coordinates(origin)
+        self.route = route
 
     def _get_coordinates(self, address):
         geo = geocoder.Geocoder(address)
