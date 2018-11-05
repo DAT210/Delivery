@@ -1,7 +1,7 @@
 from flask import Flask, request, make_response
 from flask_cors import CORS
 from flask_restful import Resource, Api, abort
-import json, requests, sys, logging, time, route, delivery
+import json, requests, sys, logging, time, route, delivery, pickle
 
 app = Flask(__name__)
 api = Api(app)
@@ -11,29 +11,6 @@ app.config["GOOGLE_MAPS_API_KEY"] = "AIzaSyA-z2Kd25PFPMs3gCSpC6bzPBazgSWtLGY"
 app.config["GOOGLE_MAPS_API_URL"] = "https://maps.googleapis.com/maps/api/directions/json?"
 app.config["ORIGIN_ADDRESS"] = "Sandnes"
 app.config["TRANSPORT_METHODS"] = ["driving", "walking", "transit"]
-
-
-#Temporary until db integration is ok.
-temp_jobs = [{
-        "order_id": 1,
-        "status": "WAITING",
-        "legs": [
-            {
-                "latitude": 58.96627642581798,
-                "longitude": 5.730213685769627,
-                "time": 25
-            },
-            {
-                "latitude": 58.95946134959505,
-                "longitude": 5.734076066751072,
-                "time": 30
-            },                {
-                "latitude": 58.95600904377245,
-                "longitude": 5.735706849832127,
-                "time": 0
-            }
-        ]
-    }]
 
 cache = {} # KEY: order_id, VALUE: Delivery object
 
@@ -61,23 +38,21 @@ class methods_eta(Resource):
 #For now i just use a static list of orders.
 class delivery_client_getjob(Resource):
     def get(self):
-        for order in temp_jobs:
-            if order["status"] == "WAITING":
-                order["status"] = "TAKEN"
-                return order
-        return "No jobs available"
+        for key, value in cache.items():
+            resp = 0
+            if value.status == "WAITING":
+                value.status = "TAKEN"
 
+                resp = {
+                    "order_id": key,
+                    "delivery_method": value.delivery_method,
+                    "address": value.destination,
+                    "route": value.route.waypoints
+                }
+                return resp
+        return False
 
-
-# class delivery_client_update(Resource):
-#     def get(self):
-#         lat = request.args.get('lat')
-#         lng = request.args.get('lng')
-#         order = request.args.get('orderid')
-#         print("Got new updates:\nOrder: {}\nLat: {}, Lng: {}".format(order, lat, lng))
-#     #TODO send coordinate updates to correct order and update map
-    
-
+#Mottar oppdateringer fra client
 class order_eta(Resource):
     def get(self, order_id):
         lat, lng, order_id, status = request.args.get('lat'), request.args.get("long"), request.args.get("oid"), request.args.get("status")
@@ -101,12 +76,12 @@ class new_order(Resource):
         delivery_method = request.form["delivery_method"]
         address = request.form["address"]
 
-        if request.form["aborted"]:
+        if request.form["aborted"] == True:
             return "Order aborted"
         else:
-            new_delivery = delivery.Delivery(delivery_method, address, order_id, "Recieved")
+            new_route = route.Route(address, delivery_method)
+            new_delivery = delivery.Delivery(delivery_method, address, order_id, "WAITING", new_route)
             cache[order_id] = new_delivery
-
 
         return "SUCCESS: ORDER {} CREATED".format(order_id)
 
