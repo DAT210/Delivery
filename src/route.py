@@ -28,10 +28,10 @@ class Route:
         self.waypoints = self.json_directions["routes"][0]["legs"][0]["steps"]
 
     def _collect_directions(self, origin, destination, mode):
-        payload = {"origin": origin, "destination", destination, "mode": mode, "key": self.__API_KEY}
+        payload = {"origin": origin, "destination": destination, "mode": mode, "key": self.__API_KEY}
 
-        if origin["lat"]:
-            payload["origin"] = "{},{}".format(origin["lat"], origin["long"])
+        #if origin["lat"]:
+        #    payload["origin"] = "{},{}".format(origin["lat"], origin["long"])
 
         data = requests.get(self.__API_URL, params=payload)
         return json.loads(data.content)
