@@ -1,21 +1,17 @@
-
+import geocoder
 
 class Delivery:
 
-    def __init__(self, delivery_method, destination, order_id, status, origin=None, eta=None):
+    def __init__(self, delivery_method, destination, order_id, status, origin="Sandnes", eta=None):
         self.delivery_method = delivery_method
         self.destination = destination
-        self.order_id = order_id
         self.status = status
+        self.order_id = order_id
+        self.origin = origin
+        self.destination_coord = self._get_coordinates(destination)
+        self.origin_coord = self._get_coordinates(origin)
 
-        if origin:
-            self.origin = origin
+    def _get_coordinates(self, address):
+        geo = geocoder.Geocoder(address)
+        return {"lat": geo.lat, "long": geo.lng}
 
-        self._insert_to_db()
-
-
-        
-
-
-    def _insert_to_db(self):
-        return

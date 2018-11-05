@@ -1,8 +1,9 @@
 import json
 import requests
+import geocoder
 
 class Route:
-    __API_KEY = "AIzaSyA-z2Kd25PFPMs3gCSpC6bzPBazgSWtLGY"
+    __API_KEY = "AIzaSyCuIwZpGcrFtXgGk_rk4MJeW7Musdj9Jm8"
     __API_URL = "https://maps.googleapis.com/maps/api/directions/json?"
 
     waypoints = {}
@@ -10,7 +11,7 @@ class Route:
     total_distance = 0
     total_price = 0
 
-    def __init__(self, destination, mode, origin='Sandnes'):
+    def __init__(self, destination, mode, origin='Sandnes', loc_mode="address"):
         self.origin = origin
         self.destination = destination
         self.mode = mode
@@ -20,18 +21,28 @@ class Route:
             self._init_total_eta_and_distance()
             self._collect_waypoints()
             self._calculate_price()
-    
+
+            if loc_mode == "address":
+                self.origin_coord = self._get_coordinates(self.origin)
+                self.destination_coord = self._get_coordinates(self.destination)
 
 
+    def _get_coordinates(self, address):
+        geo = geocoder.Geocoder(address)
+        return {"lat": geo.lat, "long": geo.lng}
 
     def _collect_waypoints(self):
         self.waypoints = self.json_directions["routes"][0]["legs"][0]["steps"]
 
     def _collect_directions(self, origin, destination, mode):
-        payload = {"origin": origin, "destination", destination, "mode": mode, "key": self.__API_KEY}
+        
+        if not isinstance(origin, str):
+            origin = "{},{}".format(origin["lat"], origin["long"])
+        
+        if not isinstance(destination, str):
+            destination = "{},{}".format(destination["lat"], destination["long"])
 
-        if origin["lat"]:
-            payload["origin"] = "{},{}".format(origin["lat"], origin["long"])
+        payload = {"origin": origin, "destination": destination, "mode": mode, "key": self.__API_KEY}
 
         data = requests.get(self.__API_URL, params=payload)
         return json.loads(data.content)
@@ -39,8 +50,8 @@ class Route:
     def _init_total_eta_and_distance(self):
         # This can be expanded to allow alternate routes
         self.total_distance = self.json_directions["routes"][0]["legs"][0]["distance"]["value"]/1000  # Convert to KM
-        if self.total_distance > 30:
-            raise ValueError("Can't deliver over 30 km")
+        if self.total_distance > 500:
+            raise ValueError("Can't deliver over 30 km, requested delivery over {} km (from {} to {}".format(self.total_distance, self.origin, self.destination))
         self.total_duration = self.json_directions["routes"][0]["legs"][0]["duration"]["value"]/60  # Convert to minutes
 
     
