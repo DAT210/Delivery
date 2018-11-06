@@ -2,7 +2,8 @@ from flask import Flask, request, make_response
 from flask_cors import CORS
 from flask_restful import Resource, Api, abort
 from random import randint
-import json, requests, sys, logging, time, route, delivery, geocoder, pickle
+import json, requests, sys, logging, time, pickle
+from utilities import Route, Geocoder, Delivery
 
 
 app = Flask(__name__)
@@ -24,7 +25,7 @@ class eta_for_delivery_methods(Resource):
 
         for method in app.config["TRANSPORT_METHODS"]:
             try:
-                best_route = route.Route(destination_address, method)
+                best_route = Route(destination_address, method)
             except ValueError as e:
                 return make_response(json.dumps({'message': e.args[0]}), 400)
             
@@ -56,9 +57,9 @@ class delivery_client_getjob(Resource):
 class delivery_client_update(Resource):
     def get(self):
         lat, lng, order_id, status = request.args.get('lat'), request.args.get("lng"), request.args.get("oid"), request.args.get("status")
-        origin = {"lat": lat, "long": lng}
+        origin = {"lat": lat, "lng": lng}
 
-        print("Recieved update on order {}. New coordinates: {}, {}".format(order_id, origin["lat"], origin["long"]))
+        print("Recieved update on order {}. New coordinates: {}, {}".format(order_id, origin["lat"], origin["lng"]))
         
         cache[order_id].origin_coord = origin
         cache[order_id].status = status
@@ -79,8 +80,8 @@ class new_order(Resource):
             print("Order aborted")
             return "Order successfully aborted"
         else:
-            new_route = route.Route(address, delivery_method)
-            new_delivery = delivery.Delivery(delivery_method, address, order_id, "WAITING", new_route)
+            new_route = Route(address, delivery_method)
+            new_delivery = Delivery(delivery_method, address, order_id, "WAITING", new_route)
             cache[order_id] = new_delivery
             return "SUCCESS: ORDER {} CREATED".format(order_id)
 
@@ -98,11 +99,11 @@ class eta_for_order(Resource):
             if order.status == "delivered":
                 del cache[order_id]
 
-            new_route = route.Route(destination, method, origin, "coord")
+            new_route = Route(destination, method, origin, "coord")
 
             return {
                 "lat": order.origin_coord["lat"],
-                "long": order.origin_coord["long"],
+                "lng": order.origin_coord["lng"],
                 "eta": {
                     "current": {
                         "text": str(new_route.total_duration) + " minutes",

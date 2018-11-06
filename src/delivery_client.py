@@ -1,5 +1,4 @@
 import json, requests, time
-from utilities import delivery, route
 
 NAMES = ["Karl", "Per", "Knut", "Ole J Moi", "Asle Berge"]
 URL_GET_JOBS = "http://127.0.0.1:1337/delivery/client/job?"

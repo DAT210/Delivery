@@ -1,20 +1,17 @@
 import json
 import requests
-import geocoder
+
 
 class Route:
     __API_KEY = "AIzaSyCuIwZpGcrFtXgGk_rk4MJeW7Musdj9Jm8"
     __API_URL = "https://maps.googleapis.com/maps/api/directions/json?"
 
-    waypoints = {}
-    total_duration = 0
-    total_distance = 0
-    total_price = 0
-
-    def __init__(self, destination, mode, origin='Sandnes', loc_mode="address"):
+    def __init__(self, destination, mode, origin='Sandnes', location_mode="address"):
         self.origin = origin
         self.destination = destination
         self.mode = mode
+        self.location_mode = location_mode
+
 
         self.json_directions = self._collect_directions(self.origin, self.destination, self.mode)
         if self._error_check():
@@ -22,25 +19,25 @@ class Route:
             self._collect_waypoints()
             self._calculate_price()
 
-            if loc_mode == "address":
+            if self.location_mode == "address":
                 self.origin_coord = self._get_coordinates(self.origin)
                 self.destination_coord = self._get_coordinates(self.destination)
 
 
     def _get_coordinates(self, address):
-        geo = geocoder.Geocoder(address)
-        return {"lat": geo.lat, "long": geo.lng}
+        geo = Geocoder(address)
+        return {"lat": geo.lat, "lng": geo.lng}
 
     def _collect_waypoints(self):
         self.waypoints = self.json_directions["routes"][0]["legs"][0]["steps"]
 
     def _collect_directions(self, origin, destination, mode):
         
-        if not isinstance(origin, str):
-            origin = "{},{}".format(origin["lat"], origin["long"])
+        if self.location_mode == "coord":
+            origin = "{},{}".format(origin["lat"], origin["lng"])
         
-        if not isinstance(destination, str):
-            destination = "{},{}".format(destination["lat"], destination["long"])
+        if self.location_mode == "coord":
+            destination = "{},{}".format(destination["lat"], destination["lng"])
 
         payload = {"origin": origin, "destination": destination, "mode": mode, "key": self.__API_KEY}
 
@@ -50,7 +47,7 @@ class Route:
     def _init_total_eta_and_distance(self):
         # This can be expanded to allow alternate routes
         self.total_distance = self.json_directions["routes"][0]["legs"][0]["distance"]["value"]/1000  # Convert to KM
-        if self.total_distance > 500:
+        if self.total_distance > 30:
             raise ValueError("Can't deliver over 30 km, requested delivery over {} km (from {} to {}".format(self.total_distance, self.origin, self.destination))
         self.total_duration = self.json_directions["routes"][0]["legs"][0]["duration"]["value"]/60  # Convert to minutes
 
@@ -93,8 +90,7 @@ class Route:
         km_price = price_base[self.mode]["km_price"]
 
         self.total_price = start_price + time_price*(self.total_duration/60) + km_price*self.total_distance
-
-
+                    
 
 
 class Delivery:
@@ -110,9 +106,8 @@ class Delivery:
         self.route = route
 
     def _get_coordinates(self, address):
-        geo = geocoder.Geocoder(address)
-        return {"lat": geo.lat, "long": geo.lng}
-
+        geo = Geocoder(address)
+        return {"lat": geo.lat, "lng": geo.lng}
 
 
 class Geocoder:
@@ -121,7 +116,6 @@ class Geocoder:
 
     def __init__(self, address):
         self.address = address
-
         self.lat, self.lng = self._geocode_address()
 
 
@@ -130,8 +124,6 @@ class Geocoder:
         payload = {"address": self.address, "key": self.__API_KEY}
 
         data = requests.get(self.__API_URL + "key={}&address={}".format(payload["key"], payload["address"]))
-        print("GEO ADDRESS: ", self.address)
         json_data = json.loads(data.content)
-        print("GEOCODER: ", json_data)
         lat, lng = json_data["results"][0]["geometry"]["location"]["lat"], json_data["results"][0]["geometry"]["location"]["lng"]
         return lat,lng
