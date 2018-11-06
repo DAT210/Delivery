@@ -30,7 +30,7 @@ def main():
         
 
 class Delivery_client:
-    
+
     def __init__(self, name):
         self.name = name
         self.job = None
