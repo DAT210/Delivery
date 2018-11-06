@@ -6,15 +6,11 @@ class Route:
     __API_KEY = "AIzaSyCuIwZpGcrFtXgGk_rk4MJeW7Musdj9Jm8"
     __API_URL = "https://maps.googleapis.com/maps/api/directions/json?"
 
-    waypoints = {}
-    total_duration = 0
-    total_distance = 0
-    total_price = 0
-
-    def __init__(self, destination, mode, origin='Sandnes', loc_mode="address"):
+    def __init__(self, destination, mode, origin='Sandnes', location_mode="address"):
         self.origin = origin
         self.destination = destination
         self.mode = mode
+
 
         self.json_directions = self._collect_directions(self.origin, self.destination, self.mode)
         if self._error_check():
@@ -22,7 +18,7 @@ class Route:
             self._collect_waypoints()
             self._calculate_price()
 
-            if loc_mode == "address":
+            if location_mode == "address":
                 self.origin_coord = self._get_coordinates(self.origin)
                 self.destination_coord = self._get_coordinates(self.destination)
 
@@ -50,7 +46,7 @@ class Route:
     def _init_total_eta_and_distance(self):
         # This can be expanded to allow alternate routes
         self.total_distance = self.json_directions["routes"][0]["legs"][0]["distance"]["value"]/1000  # Convert to KM
-        if self.total_distance > 500:
+        if self.total_distance > 30:
             raise ValueError("Can't deliver over 30 km, requested delivery over {} km (from {} to {}".format(self.total_distance, self.origin, self.destination))
         self.total_duration = self.json_directions["routes"][0]["legs"][0]["duration"]["value"]/60  # Convert to minutes
 
@@ -93,7 +89,7 @@ class Route:
         km_price = price_base[self.mode]["km_price"]
 
         self.total_price = start_price + time_price*(self.total_duration/60) + km_price*self.total_distance
-
+                    
 
         
 
