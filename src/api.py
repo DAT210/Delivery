@@ -36,12 +36,10 @@ class eta_for_delivery_methods(Resource):
 
         return response
 
-#TODO fetch job from available jobs in cache
-#For now i just use a static list of orders.
+#Fetches new job for the delivery client from cache
 class delivery_client_getjob(Resource):
     def get(self):
         for key, value in cache.items():
-            resp = 0
             if value.status == "WAITING":
                 value.status = "TAKEN"
 
@@ -54,10 +52,10 @@ class delivery_client_getjob(Resource):
                 return resp
         return False
 
-#Mottar oppdateringer fra client
-class update_eta_for_order(Resource):
+#Receives updated cooridnates from the delivery client
+class delivery_client_update(Resource):
     def get(self):
-        lat, lng, order_id, status = request.args.get('lat'), request.args.get("long"), request.args.get("oid"), request.args.get("status")
+        lat, lng, order_id, status = request.args.get('lat'), request.args.get("lng"), request.args.get("oid"), request.args.get("status")
         origin = {"lat": lat, "long": lng}
 
         print("Recieved update on order {}. New coordinates: {}, {}".format(order_id, origin["lat"], origin["long"]))
@@ -67,7 +65,7 @@ class update_eta_for_order(Resource):
     
         return "Success"
 
-
+#Receives finalized order and adds it to db and cache
 class new_order(Resource):
     def post(self):
         global cache
@@ -86,7 +84,7 @@ class new_order(Resource):
             cache[order_id] = new_delivery
             return "SUCCESS: ORDER {} CREATED".format(order_id)
 
-
+#Gives the current ETA and coordinates for a specific delivery
 class eta_for_order(Resource):
     def get(self, order_id):
         global cache
@@ -126,9 +124,8 @@ class eta_for_order(Resource):
 api.add_resource(eta_for_delivery_methods, '/delivery/methods/eta')
 api.add_resource(delivery_client_getjob, '/delivery/client/job')
 api.add_resource(eta_for_order, '/delivery/<int:order_id>/eta')
-api.add_resource(update_eta_for_order, '/delivery/client/update')
-api.add_resource(new_order, '/delivery/neworder') 
-
+api.add_resource(delivery_client_update, '/delivery/client/update')
+api.add_resource(new_order, '/delivery/neworder')
 
 
 if __name__ == '__main__':
