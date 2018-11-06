@@ -60,8 +60,6 @@ def insertAddress():
 
 
 ########################### DELIVERY UI #################################
-
-# hmmmmmmmmm! http://localhost:6969/delivery/1/delivery//eta
 @app.route('/delivery/<int:order_id>/map')
 def index(order_id):
     return render_template("index.html")
@@ -71,47 +69,77 @@ i = 0
 def eta(order_id):
     global i
     if (i == 0):
-        data = {"lat": 58.847426, "lng": 5.7535204,
-                 "eta": {"text": "12min", "val": 123123}}
+        data = {
+            "eta": {
+                "current": {
+                    "text": "13 minutes",
+                    "val": 780
+                },
+                "total": {
+                    "text": "13 minutes",
+                    "val": 780
+                }
+            },
+            "final_destination": "gausel+armen+23+stavanger",
+            "lat": "58.8564518",
+            "lng": "5.8133463",
+            "status": "None"
+        }
         i += 1
     elif (i==1):
-        data = {"lat": 58.867426, "lng": 5.7535204,
-                "eta": {"text": "12min", "val": 123123}}
+        data = {
+            "eta": {
+                "current": {
+                    "text": "9 minutes",
+                    "val": 540
+                },
+                "total": {
+                    "text": "13 minutes",
+                    "val": 780
+                }
+            },
+            "final_destination": "gausel+armen+23+stavanger",
+            "lat": "58.8564518",
+            "lng": "5.9133463",
+            "status": "None"
+        }
         i += 1
     elif (i == 2):
-        data = {"lat": 58.887426, "lng": 5.7535204,
-                "eta": {"text": "12min", "val": 123123}}
+        data = {
+            "eta": {
+                "current": {
+                    "text": "6 minutes",
+                    "val": 360
+                },
+                "total": {
+                    "text": "13 minutes",
+                    "val": 780
+                }
+            },
+            "final_destination": "gausel+armen+23+stavanger",
+            "lat": "58.8564518",
+            "lng": "6.0133463",
+            "status": "None"
+        }
         i += 1
     else:
-        data = {"lat": 58.897426, "lng": 5.7535204,
-                "eta": {"text": "12min", "val": 123123}}
+        data = {
+            "eta": {
+                "current": {
+                    "text": "4 minutes",
+                    "val": 240
+                },
+                "total": {
+                    "text": "13 minutes",
+                    "val": 780
+                }
+            },
+            "final_destination": "gausel+armen+23+stavanger",
+            "lat": "58.8564518",
+            "lng": "6.1133463",
+            "status": "None"
+        }
     return json.dumps(data)
-
-
-@app.route('/')
-def delivery():
-    eta = 20
-    percent = 0
-    flash("ETA is " + str(eta) + " minutes")
-    return render_template("index.html", eta=eta, percent=percent)
-
-
-@app.route('/1')
-def deliver1():
-    eta = 10
-    percent = 50
-    flash("ETA is " + str(eta) + " minutes")
-    return render_template("index.html", eta=eta, percent=percent)
-
-
-@app.route('/2')
-def delivery2():
-    eta = 2
-    percent = round(((20-eta)/20)*100)
-    flash("ETA is " + str(eta) + " minutes")
-    return render_template("test.html", eta=eta, percent=percent)
-
-
 
 
 ########################### DELIVERY UI #################################
