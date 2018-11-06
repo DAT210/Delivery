@@ -30,7 +30,7 @@ def main():
         
 
 class Delivery_client:
-    
+
     def __init__(self, name):
         self.name = name
         self.job = None
@@ -57,7 +57,7 @@ class Delivery_client:
                 temp = {
                     "lat": legs["end_location"]["lat"],
                     "long": legs["end_location"]["lng"],
-                    "time": legs["duration"]["value"]
+                    "time": legs["duration"]["value"]/20
                 }
 
                 self.legs.append(temp)
@@ -68,7 +68,7 @@ class Delivery_client:
     def _start_leg(self):
         self.start_time = time.time()
         self.leg_start_time = time.time()
-        requests.get(URL_SEND_UPDATE + "oid={}&lat={}&long={}&status={}".format(self.job["order_id"], self.job["route"][self.leg]["end_location"], self.job["route"][self.leg]["end_location"],None))
+        requests.get(URL_SEND_UPDATE + "oid={}&lat={}&long={}&status={}".format(self.job["order_id"], self.job["route"][self.leg]["end_location"]["lat"], self.job["route"][self.leg]["end_location"]["lng"],None))
 
     #Checks for progress in the delivery
     def _check_progress(self):
@@ -87,6 +87,7 @@ class Delivery_client:
             self.leg = self.leg + 1
             self.leg_start_time = time.time()
             print("{} is now in leg {} of {}".format(self.name, self.leg+1, len(self.legs)))
+            print("lat: {} - Long: {}".format(self.job["route"][self.leg]["end_location"]["lat"],self.job["route"][self.leg]["end_location"]["lng"]))
             requests.get(URL_SEND_UPDATE + "oid={}&lat={}&long={}&status={}".format(self.job["order_id"], self.job["route"][self.leg]["end_location"]["lat"], self.job["route"][self.leg]["end_location"]["lng"],None))
     
 
