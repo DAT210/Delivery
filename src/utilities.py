@@ -1,6 +1,6 @@
 import json
 import requests
-import geocoder
+
 
 class Route:
     __API_KEY = "AIzaSyCuIwZpGcrFtXgGk_rk4MJeW7Musdj9Jm8"
@@ -10,6 +10,7 @@ class Route:
         self.origin = origin
         self.destination = destination
         self.mode = mode
+        self.location_mode = location_mode
 
 
         self.json_directions = self._collect_directions(self.origin, self.destination, self.mode)
@@ -18,25 +19,25 @@ class Route:
             self._collect_waypoints()
             self._calculate_price()
 
-            if location_mode == "address":
+            if self.location_mode == "address":
                 self.origin_coord = self._get_coordinates(self.origin)
                 self.destination_coord = self._get_coordinates(self.destination)
 
 
     def _get_coordinates(self, address):
-        geo = geocoder.Geocoder(address)
-        return {"lat": geo.lat, "long": geo.lng}
+        geo = Geocoder(address)
+        return {"lat": geo.lat, "lng": geo.lng}
 
     def _collect_waypoints(self):
         self.waypoints = self.json_directions["routes"][0]["legs"][0]["steps"]
 
     def _collect_directions(self, origin, destination, mode):
         
-        if not isinstance(origin, str):
-            origin = "{},{}".format(origin["lat"], origin["long"])
+        if self.location_mode == "coord":
+            origin = "{},{}".format(origin["lat"], origin["lng"])
         
-        if not isinstance(destination, str):
-            destination = "{},{}".format(destination["lat"], destination["long"])
+        if self.location_mode == "coord":
+            destination = "{},{}".format(destination["lat"], destination["lng"])
 
         payload = {"origin": origin, "destination": destination, "mode": mode, "key": self.__API_KEY}
 
@@ -91,6 +92,38 @@ class Route:
         self.total_price = start_price + time_price*(self.total_duration/60) + km_price*self.total_distance
                     
 
-        
 
-                
+class Delivery:
+
+    def __init__(self, delivery_method, destination, order_id, status, route, origin="Sandnes", eta=None):
+        self.delivery_method = delivery_method
+        self.destination = destination
+        self.status = status
+        self.order_id = order_id
+        self.origin = origin
+        self.destination_coord = self._get_coordinates(destination)
+        self.origin_coord = self._get_coordinates(origin)
+        self.route = route
+
+    def _get_coordinates(self, address):
+        geo = Geocoder(address)
+        return {"lat": geo.lat, "lng": geo.lng}
+
+
+class Geocoder:
+    __API_KEY = "AIzaSyCuIwZpGcrFtXgGk_rk4MJeW7Musdj9Jm8"
+    __API_URL = "https://maps.googleapis.com/maps/api/geocode/json?"
+
+    def __init__(self, address):
+        self.address = address
+        self.lat, self.lng = self._geocode_address()
+
+
+
+    def _geocode_address(self):
+        payload = {"address": self.address, "key": self.__API_KEY}
+
+        data = requests.get(self.__API_URL + "key={}&address={}".format(payload["key"], payload["address"]))
+        json_data = json.loads(data.content)
+        lat, lng = json_data["results"][0]["geometry"]["location"]["lat"], json_data["results"][0]["geometry"]["location"]["lng"]
+        return lat,lng
