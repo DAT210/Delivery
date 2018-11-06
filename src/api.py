@@ -61,16 +61,11 @@ class update_eta_for_order(Resource):
         origin = {"lat": lat, "long": lng}
 
         print("Recieved update on order {}. New coordinates: {}, {}".format(order_id, origin["lat"], origin["long"]))
-
-        if status == "delivered":
-            print("Order {} has been delivered.".format(order_id))
-            del cache[order_id]
-            return "Order has been delivered"
         
         cache[order_id].origin_coord = origin
         cache[order_id].status = status
     
-        return
+        return "Success"
 
 
 class new_order(Resource):
@@ -78,7 +73,7 @@ class new_order(Resource):
         global cache
         # Insert new order with metod to DB
 
-        order_id = request.form["order_id"]
+        order_id = str(request.form["order_id"])
         delivery_method = request.form["delivery_method"]
         address = str(request.form["address"])
 
@@ -89,57 +84,50 @@ class new_order(Resource):
             new_route = route.Route(address, delivery_method)
             new_delivery = delivery.Delivery(delivery_method, address, order_id, "WAITING", new_route)
             cache[order_id] = new_delivery
-            print("Order created: {}".format(order_id))
             return "SUCCESS: ORDER {} CREATED".format(order_id)
 
 
 class eta_for_order(Resource):
     def get(self, order_id):
         global cache
-        order = cache[str(order_id)]
-        
-        destination = order.destination_coord
-        method = order.delivery_method
-        origin = order.origin_coord
 
-        print("DEST: {}".format(destination))
-        print("ORI: {}".format(origin))
+        try:
+            order = cache[str(order_id)]
+            destination = order.destination_coord
+            method = order.delivery_method
+            origin = order.origin_coord
 
-        new_route = route.Route(destination, method, origin, "coord")
+            if order.status == "delivered":
+                del cache[order_id]
 
-        print("New coordinates and ETA for order {}: {}, ETA: {}".format(order_id, origin, new_route.total_duration))
+            new_route = route.Route(destination, method, origin, "coord")
 
-        return {
-            "lat": order.origin_coord["lat"],
-            "long": order.origin_coord["long"],
-            "eta": {
-                "text": str(new_route.total_duration) + " minutes",
-                "val": new_route.total_duration * 60
+            return {
+                "lat": order.origin_coord["lat"],
+                "long": order.origin_coord["long"],
+                "eta": {
+                    "current": {
+                        "text": str(new_route.total_duration) + " minutes",
+                        "val": new_route.total_duration * 60
+                        },
+                    "total": {
+                        "text": str(order.route.total_duration) + " minutes",
+                        "val": order.route.total_duration * 60
+                    }
+                },
+                "status": order.status,
+                "final_destination": order.route.destination
             }
-        }
 
-
-class test(Resource):
-    def get(self):
-        dest = request.args.get("destination")
-        # lat = int(request.args.get("lat"))
-        # lng = int(request.args.get("lng"))
-        # dest = {'lat': lat, 'long': lng}
-        # ori = {'lat': 58.8532585, 'long': 5.7329455}
-        test_route = route.Route(dest, "driving")
-
-        print("Destination: {}, origin: {}, ETA: {}".format(test_route.destination, test_route.origin, test_route.total_duration))
-
+        except KeyError:
+            return make_response(json.dumps({'message': "Order does not exist"}), 400)
 
 
 api.add_resource(eta_for_delivery_methods, '/delivery/methods/eta')
 api.add_resource(delivery_client_getjob, '/delivery/client/job')
 api.add_resource(eta_for_order, '/delivery/<int:order_id>/eta')
 api.add_resource(update_eta_for_order, '/delivery/client/update')
-api.add_resource(new_order, '/delivery/neworder')  # POST REQ
-
-api.add_resource(test, '/test')
-
+api.add_resource(new_order, '/delivery/neworder') 
 
 
 

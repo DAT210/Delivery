@@ -6,7 +6,6 @@ class Geocoder:
 
     def __init__(self, address):
         self.address = address
-
         self.lat, self.lng = self._geocode_address()
 
 
@@ -15,8 +14,6 @@ class Geocoder:
         payload = {"address": self.address, "key": self.__API_KEY}
 
         data = requests.get(self.__API_URL + "key={}&address={}".format(payload["key"], payload["address"]))
-        print("GEO ADDRESS: ", self.address)
         json_data = json.loads(data.content)
-        print("GEOCODER: ", json_data)
         lat, lng = json_data["results"][0]["geometry"]["location"]["lat"], json_data["results"][0]["geometry"]["location"]["lng"]
         return lat,lng
