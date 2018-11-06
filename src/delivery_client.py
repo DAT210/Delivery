@@ -1,4 +1,5 @@
-import json, requests, time, delivery, route
+import json, requests, time
+from utilities import delivery, route
 
 NAMES = ["Karl", "Per", "Knut", "Ole J Moi", "Asle Berge"]
 URL_GET_JOBS = "http://127.0.0.1:1337/delivery/client/job?"
@@ -24,10 +25,7 @@ def main():
                 print("{} alreeady has a job assigned. Checking status.".format(client.name))
                 client._check_progress()
         time.sleep(5)
-        
-
-    
-        
+              
 
 class Delivery_client:
 
@@ -40,12 +38,6 @@ class Delivery_client:
         self.start_time = None
 
 
-    #Checks if the client have a delivery job
-    def _have_job(self):
-        if self.job == None:
-            return False
-        return True
-
     #Fetches a new job for the client
     def _get_job(self):
         r = requests.get(URL_GET_JOBS).content
@@ -57,39 +49,54 @@ class Delivery_client:
                 temp = {
                     "lat": legs["end_location"]["lat"],
                     "long": legs["end_location"]["lng"],
-                    "time": legs["duration"]["value"]/20
+                    "time": legs["duration"]["value"]/20 #OBS! Is now sped up 20 times
                 }
-
                 self.legs.append(temp)
             self.leg = 0
             return True
     
     #Starts simulation of the delivery
     def _start_leg(self):
+        oid = self.job["order_id"]
+        lat = self.job["route"][self.leg]["end_location"]["lat"]
+        lng = self.job["route"][self.leg]["end_location"]["lng"]
+
         self.start_time = time.time()
         self.leg_start_time = time.time()
-        requests.get(URL_SEND_UPDATE + "oid={}&lat={}&long={}&status={}".format(self.job["order_id"], self.job["route"][self.leg]["end_location"]["lat"], self.job["route"][self.leg]["end_location"]["lng"],None))
+        self._send_update(oid, lat, lng, None)
 
     #Checks for progress in the delivery
     def _check_progress(self):
+        oid = self.job["order_id"]
+        lat = self.job["route"][self.leg]["end_location"]["lat"]
+        lng = self.job["route"][self.leg]["end_location"]["lng"]
         time_gone = time.time() - self.leg_start_time
+
         if time_gone < self.legs[self.leg]["time"]:
-            print("{} is still in leg {} of {}. Time left: {}".format(self.name, self.leg + 1, len(self.legs), self.legs[self.leg]["time"]-time_gone))
+            print("{} is still in leg {} of {}. Time left: {}".format(
+                self.name, self.leg + 1, len(self.legs), self.legs[self.leg]["time"]-time_gone))
         elif self.leg + 1 == len(self.legs):
-            print("{} is finished with the delivery. Will look for new. Delivered in {} seconds.".format(self.name, time.time()-self.start_time))
-            requests.get(URL_SEND_UPDATE + "oid={}&lat={}&long={}&status={}".format(self.job["order_id"], self.job["route"][self.leg]["end_location"]["lat"], self.job["route"][self.leg]["end_location"]["lng"], "delivered"))
-            self.job = None
-            self.leg_start_time = None
-            self.start_time = None
-            self.leg = 0
-            self.legs = []
+            print("{} is finished with the delivery. Will look for new. Delivered in {} seconds.".format
+                (self.name, time.time()-self.start_time))
+            self._send_update(oid, lat, lng, "DELIVERED")
+            self._reset()
         else:
             self.leg = self.leg + 1
             self.leg_start_time = time.time()
             print("{} is now in leg {} of {}".format(self.name, self.leg+1, len(self.legs)))
-            print("lat: {} - Long: {}".format(self.job["route"][self.leg]["end_location"]["lat"],self.job["route"][self.leg]["end_location"]["lng"]))
-            requests.get(URL_SEND_UPDATE + "oid={}&lat={}&long={}&status={}".format(self.job["order_id"], self.job["route"][self.leg]["end_location"]["lat"], self.job["route"][self.leg]["end_location"]["lng"],None))
-    
+            self._send_update(oid, lat, lng, None)
+
+    #called to send updated coordinates to API
+    def _send_update(self, oid, lat, lng, status):
+        requests.get(URL_SEND_UPDATE + "oid={}&lat={}&lng={}&status={}".format(oid, lat, lng, status))
+
+    #Resets the delivery job when the current is finished
+    def _reset(self):
+        self.job = None
+        self.leg = None
+        self.legs = []
+        self.leg_start_time = None
+        self.start_time = None
 
 if __name__ == '__main__':
     main()
