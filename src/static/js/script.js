@@ -11,7 +11,7 @@ var directionsService;
 
 $(function(){
     setInterval(function () {
-        // path = /delivery/id/map
+        // path = /delivery/<order_id>/map
         var url = window.location.pathname;
         var id = url.split("/")[2];
         $.ajax({
@@ -19,7 +19,16 @@ $(function(){
             url: "/delivery/" + id + "/eta",
             dataType: "json",
             success: function (response) {
-                setNewMarker(response.lat, response.lng);
+                var markerLat = (markers[markers.length - 1]).getPosition().lat().toFixed(6);
+                var markerLng = (markers[markers.length - 1]).getPosition().lng().toFixed(6);
+                var responseLat = response.lat.toFixed(6);
+                var responseLng = response.lng.toFixed(6);
+                if (markerLat === responseLat && markerLng == responseLng){
+                    console.log("markers have the same position")
+                }else{
+                    setNewMarker(response.lat, response.lng)
+                }
+                
             },
             error: function (error) {
             alert("something went wrong (GET)")
@@ -29,8 +38,6 @@ $(function(){
     }, 2000);
 
 });
-
-// icons: https://icons8.com
 
 function initMap() {
     geocoder = new google.maps.Geocoder();
@@ -45,34 +52,22 @@ function initMap() {
 }
 
 function removePrevMarker() {
-    for (i=0 ; i<markers.length-1 ; i++) {
+    for (i=0 ; i < markers.length-1 ; i++) {
         markers[i].setMap(null);
     }
 }
 
-// TODO: finne ut hvordan man sette inn et custom icon
-// fikse slik at den første også blir et icon
-// fikse slik at destinasjonsadressen er et målflagg og ikke flytter på seg
-
 
 function setNewMarker(lat, lng){
-    // var image = "http://image.flaticon.com/icons/svg/252/252025.svg"
     var latlng = new google.maps.LatLng(lat, lng);
     searchResults.push(latlng)
     var marker = new google.maps.Marker({
         map: map,
         position: latlng,
     });
+
     markers.push(marker);
     removePrevMarker();
-
-    // console.log(markers.length)
-    // if (markers.length >= 2) {
-    //     directionsService = new google.maps.DirectionsService();
-    //     directionsDisplay = new google.maps.DirectionsRenderer();
-    //     directionsDisplay.setMap(map);
-    //     calculateAndDisplayRoute(directionsService, directionsDisplay);
-    // }
 }
 
 function geocodeAddress(address) {
@@ -91,17 +86,3 @@ function geocodeAddress(address) {
         }
     });
 }
-
-// function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-//     directionsService.route({
-//         origin: searchResults[1],
-//         destination: searchResults[0],
-//         travelMode: google.maps.TravelMode.DRIVING
-//     }, function (response, status) {
-//         if (status == google.maps.DirectionsStatus.OK) {
-//             directionsDisplay.setDirections(response);
-//         } else {
-//             window.alert('Directions request failed due to ' + status);
-//         }
-//     });
-// }
