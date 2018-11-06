@@ -80,7 +80,7 @@ def eta(order_id):
                     "val": 780
                 }
             },
-            "final_destination": "gausel+armen+23+stavanger",
+            "final_destination": "gauselarmen 23, stavanger",
             "lat": "58.8564518",
             "lng": "5.8133463",
             "status": "None"
@@ -98,7 +98,7 @@ def eta(order_id):
                     "val": 780
                 }
             },
-            "final_destination": "gausel+armen+23+stavanger",
+            "final_destination": "gauselarmen 23, stavanger",
             "lat": "58.8564518",
             "lng": "5.9133463",
             "status": "None"
@@ -116,7 +116,7 @@ def eta(order_id):
                     "val": 780
                 }
             },
-            "final_destination": "gausel+armen+23+stavanger",
+            "final_destination": "gauselarmen 23, stavanger",
             "lat": "58.8564518",
             "lng": "6.0133463",
             "status": "None"
@@ -134,7 +134,7 @@ def eta(order_id):
                     "val": 780
                 }
             },
-            "final_destination": "gausel+armen+23+stavanger",
+            "final_destination": "gauselarmen 23, stavanger",
             "lat": "58.8564518",
             "lng": "6.1133463",
             "status": "None"

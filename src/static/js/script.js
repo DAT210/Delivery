@@ -3,10 +3,7 @@ var geocoder;
 var map;
 var searchResults = [];
 var markers = [];
-var startAddr = "Gauselarmen 14";
-var endAddr = "Gamle austråttvei 14";
-var directionsDisplay;
-var directionsService;
+var endAddr = [];
 
 
 $(function(){
@@ -15,21 +12,32 @@ $(function(){
         var url = window.location.pathname;
         var id = url.split("/")[2];
         $.ajax({
+
             type: "GET",
             url: "/delivery/" + id + "/eta",
             dataType: "json",
             success: function (response) {
-                // hvordan sette status.order?
-                // hvordan sette statusbaren?
+                // set the target marker
+                var end = response.final_destination;
+                console.log(end)
+                if (endAddr.length < 1) {
+                    endAddr.push(end);
+                    geocodeAddress(end);
+                }
+
+                
+                // display statusbar
+                // display status
                 var status = response.status;
                 var eta = response.eta.current.val;
                 var totalTime = response.eta.total.val;
-                var markerLat = (markers[markers.length - 1]).getPosition().lat().toFixed(6);
-                var markerLng = (markers[markers.length - 1]).getPosition().lng().toFixed(6);
+                if (markers.length > 0 ) {
+                    var markerLat = (markers[markers.length - 1]).getPosition().lat().toFixed(6);
+                    var markerLng = (markers[markers.length - 1]).getPosition().lng().toFixed(6);
+                }
                 var responseLat = parseFloat(response.lat).toFixed(6);
                 var responseLng = parseFloat(response.lng).toFixed(6);
                 var percent = parseInt((1 - (eta / totalTime)) * 100)
-                console.log(percent)
                 $('#msg').css("display", "block").html("status: " + status)
                 $('#prog-bar').css("width", percent + "%");
                 $('#progress-text').html(percent + "%")
@@ -69,14 +77,12 @@ $(function(){
 
 function initMap() {
     geocoder = new google.maps.Geocoder();
-    var latlng = new google.maps.LatLng(-34.397, 150.644);
+    var latlng = new google.maps.LatLng(58.9556, 5.8644);
     var myOptions = {
         zoom: 8,
         center: latlng,
     }
     map = new google.maps.Map(document.getElementById('map'), myOptions);
-    // geocodeAddress(startAddr);
-    geocodeAddress(endAddr);
 }
 
 function removePrevMarker() {
@@ -89,28 +95,34 @@ function removePrevMarker() {
 function setNewMarker(lat, lng){
     var latlng = new google.maps.LatLng(lat, lng);
     searchResults.push(latlng);
+    var car = {
+        url: 'http://maps.google.com/mapfiles/kml/shapes/cabs.png',
+        scaledSize: new google.maps.Size(20, 20),
+    };
     var marker = new google.maps.Marker({
         map: map,
         position: latlng,
+        icon: car
     });
 
     markers.push(marker);
     removePrevMarker();
 }
 
+
 function geocodeAddress(address) {
-    geocoder.geocode({ "address": address }, function (results, status) {
-        if (status === "OK") {
-            map.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
-            searchResults.push(results[0].geometry.location);
-            console.log(results[0].geometry.location);
-            markers.push(marker);
-        }else {
-            alert("Geocode was not successful for the following reason: " + status);
-        }
-    });
-}
+  geocoder.geocode({ address: address }, function(results, status) {
+    if (status === "OK") {
+      map.setCenter(results[0].geometry.location);
+      var flag = {
+        url: "http://maps.google.com/mapfiles/kml/shapes/flag.png",
+        scaledSize: new google.maps.Size(20, 20)
+      };
+      var marker = new google.maps.Marker({
+        map: map,
+        position: results[0].geometry.location,
+        icon: flag
+      });
+    }
+  });
+}   
