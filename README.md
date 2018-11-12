@@ -19,38 +19,43 @@ Delivery service that will provide APIs for obtaining info regarding available d
 ## Developing
 
 ### Built With
-Docker container using: Python/Flask
+* [Python 3](https://www.python.org/download/releases/3.0/)
+* [Flask](http://flask.pocoo.org/)
+* [MySQL](https://www.mysql.com/)
+* [Docker](https://www.docker.com/get-started)
 
 ### Prerequisites
-[Docker](https://www.docker.com/get-started)
+* [Python 3](https://www.python.org/download/releases/3.0/)
+* [Flask](http://flask.pocoo.org/)
+* [MySQL](https://www.mysql.com/)
+* [Docker](https://www.docker.com/get-started)
 
 
 ### Setting up Dev ##TODO
 
-Here's a brief intro about what a developer must do in order to start developing
-the project further:
+For further development the developer needs to have [Python 3](https://www.python.org/download/releases/3.0/) installed. The easiest way to get Pyhton 3 as well as a ot of frequently used packages is by installing [Anaconda](https://www.anaconda.com/download/).
 
+When all is set up clone the repository with the command below.
 ```shell
-git clone https://github.com/your/your-project.git
-cd your-project/
-packagemanager install
+git clone https://github.com/DAT210/Delivery.git
 ```
 
-And state what happens step-by-step. If there is any virtual environment, local server or database feeder needed, explain here.
+If you install a clean version of Python 3 you also have to install these packages from commandline.
+```shell
+python -m pip install Flask
+python -m pip install mysql-connector 
+```
 
 ### Building ##TODO
 
-If your project needs some additional steps for the developer to build the
-project after some code changes, state them here. for example:
-
+To run the server and the delivery client first change directory to the src folder of delivery and then execute the api and delivery client:
 ```shell
-./configure
-make
-make install
+cd delivery/src/
+python api.py
+python delivery_client.py
 ```
 
-Here again you should state what actually happens when the code above gets
-executed.
+The api should now be available on http://localhost:1337
 
 ### Deploying / Publishing ##TODO
 give instructions on how to build and release a new version
@@ -75,12 +80,11 @@ using the project.
 
 ## Tests ##TODO
 
-Describe and show how to run the tests with code examples.
-Explain what these tests test and why.
+Tests against the API is written in postman and you will therefore need [Postman](https://www.getpostman.com/) to run these tests. One alternative is to use Newman which buids on Node.js and run the tests from commandline.
 
-```shell
-Give an example
-```
+The tests is saved under delivery/test/integration/Delivery_API_tests.json
+
+Load this file in to Postman and you will get a collection with tests that can test alle teh API methods, both in legan and illegal ways. These tests can be run together as a collection or seperatly.
 
 ## Style guide ##TODO
 
