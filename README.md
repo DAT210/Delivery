@@ -7,10 +7,11 @@
 Delivery service that will provide APIs for obtaining info regarding available delivery options and ETAs.
 
 ## Installing / Getting started
-
-* git clone https://github.com/DAT210/Delivery.git
-* cd to repo directory
-* run command: "docker-compose up --build"
+```shell
+git clone https://github.com/DAT210/Delivery.git
+cd to repo directory
+run command: "docker-compose up --build"
+```
 
 ### Container should now be visible
 * On docker: localhost:4020
