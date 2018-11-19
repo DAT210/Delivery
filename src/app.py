@@ -11,19 +11,20 @@ api = Api(app)
 
 app.config["SECRET_KEY"] = "mysecret"
 
-# Pass inn app.config if you wat to use the database class
+# Makes it possible to send POST requests from javascript outside this service.
+CORS(app)
+
+# Pass inn app.config 
 app.config["DATABASE_USER"] = "root"
 app.config["DATABASE_PASSWORD"] = "root"
 app.config["DATABASE_DB"] = "delivery"
 app.config["DATABASE_HOST"] = "db"
 app.config["DATABASE_PORT"] = "3306"
 
-# Makes it possible to send POST requests from javascript outside this service.
-CORS(app)
-
 
 ########################### DATABASE EXAMPLE #################################
 
+# This is api stuff
 @app.route('/insert_delivery')
 def insertDelivery():
     # pass inn config
@@ -140,30 +141,6 @@ def eta(order_id):
             "status": "None"
         }
     return json.dumps(data)
-
-
-########################### DELIVERY UI #################################
-
-#TODO: Implement functioncalls depending on routes and content of http requests
-
-
-
-##########Just for testing#################################################
-
-@app.route("/testing")
-def testing():
-    return 'Yes, you got here'
-
-@app.route("/testingget", methods=["GET"])
-def testingget():
-    return 'Yes, you got here with the text: ' + request.args.get("test")
-@app.route("/testingpost", methods=["POST"])
-def testingpost():
-    testvalue = "Nothing"
-    if "aKey" in request.form :
-        testvalue = request.form["aKey"]
-    return "you got here " + testvalue 
-
 
 if __name__ == '__main__':
     app.run(debug=True, host='127.0.0.1', port=6969)

@@ -17,9 +17,6 @@ class Database:
                                                 )
         return g._database
 
-    # TODO få databasen til å lagre strings i utf8 format FAAACCCCKKK!!!
-    # TODO kjør tester
-
     # 1. method: Fetch all from first table (delivery)
     def query_delivery(self):
         cur = self.db.cursor()
