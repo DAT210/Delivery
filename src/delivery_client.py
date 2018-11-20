@@ -63,7 +63,7 @@ class Delivery_client:
 
         self.start_time = time.time()
         self.leg_start_time = time.time()
-        self._send_update(oid, lat, lng, None)
+        self._send_update(oid, lat, lng, "On it's way")
 
     #Checks for progress in the delivery
     def _check_progress(self):
@@ -84,7 +84,7 @@ class Delivery_client:
             self.leg = self.leg + 1
             self.leg_start_time = time.time()
             print("{} is now in leg {} of {}".format(self.name, self.leg+1, len(self.legs)))
-            self._send_update(oid, lat, lng, None)
+            self._send_update(oid, lat, lng, "On it's way")
 
     #called to send updated coordinates to API
     def _send_update(self, oid, lat, lng, status):

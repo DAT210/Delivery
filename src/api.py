@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, render_template
 from flask_cors import CORS
 from flask_restful import Resource, Api, abort
 from random import randint
@@ -61,8 +61,8 @@ class delivery_client_update(Resource):
 
         print("Recieved update on order {}. New coordinates: {}, {}".format(order_id, origin["lat"], origin["lng"]))
         
-        cache[order_id].origin_coord = origin
-        cache[order_id].status = status
+        cache[str(order_id)].origin_coord = origin
+        cache[str(order_id)].status = status
     
         return "Success"
 
@@ -85,7 +85,7 @@ class new_order(Resource):
             except ValueError as e:
                 return make_response(json.dumps({'message': e.args[0]}), 400)
             new_delivery = Delivery(delivery_method, address, order_id, "WAITING", new_route)
-            cache[order_id] = new_delivery
+            cache[str(order_id)] = new_delivery
             return "SUCCESS: ORDER {} CREATED".format(order_id)
 
 #Gives the current ETA and coordinates for a specific delivery
@@ -100,7 +100,7 @@ class eta_for_order(Resource):
             origin = order.origin_coord
 
             if order.status == "delivered":
-                del cache[order_id]
+                del cache[str(order_id)]
 
             new_route = Route(destination, method, origin, "coord")
 
@@ -123,6 +123,12 @@ class eta_for_order(Resource):
 
         except KeyError:
             return make_response(json.dumps({'message': "Order does not exist"}), 400)
+
+    
+@app.route('/delivery/<int:order_id>/map')
+def index(order_id):
+    return render_template("index.html")
+    
 
 
 api.add_resource(eta_for_delivery_methods, '/delivery/methods/eta')
