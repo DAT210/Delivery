@@ -80,7 +80,10 @@ class new_order(Resource):
             print("Order aborted")
             return "Order successfully aborted"
         else:
-            new_route = Route(address, delivery_method)
+            try:
+                new_route = Route(address, delivery_method)
+            except ValueError as e:
+                return make_response(json.dumps({'message': e.args[0]}), 400)
             new_delivery = Delivery(delivery_method, address, order_id, "WAITING", new_route)
             cache[order_id] = new_delivery
             return "SUCCESS: ORDER {} CREATED".format(order_id)

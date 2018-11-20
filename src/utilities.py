@@ -58,6 +58,9 @@ class Route:
 
         if self.origin == "" or self.origin == None:
             raise ValueError("Origin address is empty.")
+        
+        if self.mode not in ["driving", "walking", "transit"]:
+            raise ValueError("Transport method not recognized or supported")
 
         for waypoint in self.json_directions["geocoded_waypoints"]:
             if waypoint["geocoder_status"] != "OK":
