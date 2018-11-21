@@ -1,0 +1,199 @@
+openapi: 3.0.1
+info:
+  title: Delivery_API
+  description: API for the Delivery microservice
+  version: '0.1'
+servers:
+  - url: 'http://0.0.0.0'
+  - url: 'http://0.0.0.0:80'
+paths:
+  /delivery/neworder:
+    post:
+      description: Creates a new order based on the provided input
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                aborted:
+                  type: bool
+                delivery_method:
+                  type: string
+                order_id:
+                  type: integer
+            examples:
+              '0':
+                value: |
+                {
+                    "order_id": 1,
+                    "address": "stavanger",
+                    "delivery_method": "driving",
+                    "aborted": "false"
+                }
+      responses:
+        '200':
+          description: Order was successfully created
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: string
+              examples: {}
+  /delivery/{order_id}/eta:
+    get:
+      description: Returns ETA update for the order with the specified order ID
+      parameters:
+        - name: order_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ETA update on specified order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  eta:
+                    type: object
+                    properties:
+                      current:
+                        type: object
+                        properties:
+                          val:
+                            type: integer
+                          text:
+                            type: string
+                      total:
+                        type: object
+                        properties:
+                          val:
+                            type: integer
+                          text:
+                            type: string
+                  lng:
+                    type: number
+                  final_destination:
+                    type: string
+                  lat:
+                    type: number
+                  status:
+                    type: string
+              examples:
+                '0':
+                  value: |
+                    {
+                        "eta": {
+                            "current": {
+                                "text": "17.0 minutes", 
+                                "val": 1020
+                            }, 
+                            "total": {
+                                "text": "17.0 minutes", 
+                                "val": 1020
+                            }
+                        }, 
+                        "final_destination": "stavanger", 
+                        "lat": 58.8532585, 
+                        "lng": 5.7329455, 
+                        "status": "WAITING"
+                    }
+  /delivery/methods/eta:
+    get:
+      description: Returns ETA for all avaliable delivery methods for the specified address
+      parameters:
+        - name: address
+          in: query
+          schema:
+            type: string
+          example: stavanger
+      responses:
+        '200':
+          description: ETA for all avaliable delivery methods
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  driving:
+                    type: object
+                    properties:
+                      eta:
+                        type: number
+                      distance:
+                        type: number
+                      price:
+                        type: number
+                  transit:
+                    type: object
+                    properties:
+                      eta:
+                        type: number
+                      distance:
+                        type: number
+                      price:
+                        type: number
+                  walking:
+                    type: object
+                    properties:
+                      eta:
+                        type: number
+                      distance:
+                        type: number
+                      price:
+                        type: number
+              examples:
+                '0':
+                  value: |
+                    {
+                        "driving": {
+                            "distance": 15.0, 
+                            "eta": 17.0, 
+                            "price": 90.0
+                        }, 
+                        "transit": {
+                            "distance": 14.0, 
+                            "eta": 16.0, 
+                            "price": 160.0
+                        }, 
+                        "walking": {
+                            "distance": 14.0, 
+                            "eta": 185.0, 
+                            "price": 1025.0
+                        }
+                    }
+  /delivery/1/eta/update:
+    get:
+      description: Update position and status of existing order
+      parameters:
+        - name: lng
+          in: query
+          schema:
+            type: string
+          example: '5.5'
+        - name: lat
+          in: query
+          schema:
+            type: string
+          example: '58'
+        - name: status
+          in: query
+          schema:
+            type: string
+          example: In transit
+      responses:
+        '200':
+          description: Position and status successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                '0':
+                  value: |
+                    "Success"
