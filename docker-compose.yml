@@ -1,7 +1,17 @@
-version: "3"
+version: "3.5"
 services:
-  app:
+  api:
     container_name: delivery_service
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - '4020:80'
+      - '22000:80'
+    networks: 
+      - deliverynet
+
+networks: 
+  deliverynet:
+    driver: bridge
+    name: delivery_net
+

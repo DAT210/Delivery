@@ -10,6 +10,6 @@ RUN pip install --trusted-host pypi.python.org -r docker_files/requirements.txt
 
 EXPOSE 80
 
-ENV NAME Delivery
+ENV NAME DeliveryAPI
 
-CMD [ "python", "app.py" ]
+CMD python api.py

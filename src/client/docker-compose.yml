@@ -1,0 +1,15 @@
+version: "3.5"
+services:
+
+  delivery_client:
+    container_name: delivery_client
+    build:
+      context: .
+      dockerfile: Dockerfile-client
+    networks: 
+      - deliverynet
+
+networks: 
+  deliverynet:
+    external:
+      name: delivery_net
