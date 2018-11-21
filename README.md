@@ -58,6 +58,14 @@ python delivery_client.py
 
 The api should now be available on http://localhost:1337
 
+The following endpoints are avaliable:
+* /delivery/methods/eta
+* /delivery/ORDER_ID/eta
+* /delivery/neworder
+* /delivery/client/update
+
+More information on how to send requests is avaliable in the API documentation [here](https://github.com/DAT210/Delivery/blob/dev/docs/deliveryAPI.yaml)
+
 ### Deploying / Publishing ##TODO
 give instructions on how to build and release a new version
 In case there's some step you have to take that publishes this project to a
