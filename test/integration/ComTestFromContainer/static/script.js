@@ -23,7 +23,6 @@ $(document).ready(function() {
         $("#routewithpostform").submit(testPOST(containerAddress, "/testingpost", $('#routewithpostform').serialize()));
     })
 
-
 });
 function testPOST(containerAddress, path, indata){
     $.ajax({

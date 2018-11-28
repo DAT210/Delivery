@@ -32,7 +32,7 @@ run command: "docker-compose up --build"
 * [Docker](https://www.docker.com/get-started)
 
 
-### Setting up Dev ##TODO
+### Setting up Development environment
 
 For further development the developer needs to have [Python 3](https://www.python.org/download/releases/3.0/) installed. The easiest way to get Pyhton 3 as well as a ot of frequently used packages is by installing [Anaconda](https://www.anaconda.com/download/).
 
@@ -43,11 +43,23 @@ git clone https://github.com/DAT210/Delivery.git
 
 If you install a clean version of Python 3 you also have to install these packages from commandline.
 ```shell
-python -m pip install Flask
-python -m pip install mysql-connector 
+pip install flask
+pip install mysql-connector
+pip install requests
 ```
 
-### Building ##TODO
+The purpose of this API is to update ETA for a delivery. It's reliant on a service to provide GPS coordinates to continously update ETA and position.
+To do this there is an avaliable script to simulate this, as well as a script to create fake orders.
+
+
+To start the simulation, run the server, order generator script and the delivery client.
+
+
+The page for viewing ETA updates will be here: http://localhost:1337/delivery/ORDER_ID/map (replace "ORDER_ID" with the ID of the desired order)
+
+
+
+### Building
 
 To run the server and the delivery client first change directory to the src folder of delivery and then execute the api and delivery client:
 ```shell
