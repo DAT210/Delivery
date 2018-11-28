@@ -10,7 +10,7 @@ app = Flask(__name__)
 api = Api(app)
 CORS(app) #Makes it possible to send POST requests from javascript outside this service.
 
-app.config["GOOGLE_MAPS_API_KEY"] = "AIzaSyCuIwZpGcrFtXgGk_rk4MJeW7Musdj9Jm8"
+
 app.config["GOOGLE_MAPS_API_URL"] = "https://maps.googleapis.com/maps/api/directions/json?"
 app.config["ORIGIN_ADDRESS"] = "Sandnes"
 app.config["TRANSPORT_METHODS"] = ["driving", "walking", "transit"]
