@@ -51,16 +51,12 @@ pip install requests
 The purpose of this API is to update ETA for a delivery. It's reliant on a service to provide GPS coordinates to continously update ETA and position.
 To do this there is an avaliable script to simulate this, as well as a script to create fake orders.
 
+
 To start the simulation, run the server, order generator script and the delivery client.
 
-```shell
-cd delivery/src
-python api.py
-python route_tests.py
-python delivery_client.py
-```
 
 The page for viewing ETA updates will be here: http://localhost:1337/delivery/ORDER_ID/map (replace "ORDER_ID" with the ID of the desired order)
+
 
 
 ### Building
@@ -73,14 +69,6 @@ python delivery_client.py
 ```
 
 The api should now be available on http://localhost:1337
-
-The following endpoints are avaliable:
-* /delivery/methods/eta
-* /delivery/ORDER_ID/eta
-* /delivery/neworder
-* /delivery/client/update
-
-More information on how to send requests is avaliable in the API documentation [here](https://github.com/DAT210/Delivery/blob/dev/docs/deliveryAPI.yaml)
 
 ### Deploying / Publishing ##TODO
 give instructions on how to build and release a new version
@@ -97,17 +85,19 @@ And again you'd need to tell what the previous code actually does.
 
 We can maybe use [SemVer](http://semver.org/) for versioning. For the versions available, see the [link to tags on this repository](/tags).
 
-
 ## Configuration ##TODO
 
 Here you should write what are all of the configurations a user can enter when
 using the project.
 
-## Tests ##TODO
+## Tests
 
 Tests against the API is written in postman and you will therefore need [Postman](https://www.getpostman.com/) to run these tests. One alternative is to use Newman which buids on Node.js and run the tests from commandline.
 
-The tests is saved under delivery/test/integration/Delivery_API_tests.json
+The tests is saved under: 
+```
+delivery/test/integration/Delivery_API_tests.json
+```
 
 Load this file in to Postman and you will get a collection with tests that can test alle teh API methods, both in legan and illegal ways. These tests can be run together as a collection or seperatly.
 
@@ -115,11 +105,28 @@ Load this file in to Postman and you will get a collection with tests that can t
 
 Explain your code style and show how to check it.
 
-## Api Reference ##TODO
+##  Api Reference
 
 If the api is external, link to api documentation. If not describe your api including authentication methods as well as explaining all the endpoints with their required parameters.
 
+When the API is running the following endpoints are avaliable:
+```
+* /delivery/methods/eta
+* /delivery/ORDER_ID/eta
+* /delivery/neworder
+* /delivery/client/update
+```
+More information on how to send requests is avaliable in the API documentation [here](https://github.com/DAT210/Delivery/blob/dev/docs/deliveryAPI.yaml)
 
+External API's used in this application includes Google's Direction, Geocoder and Maps Javascript API.
+Documentation for the different API's can be found below.
+
+[Google Maps Javascript API](https://developers.google.com/maps/documentation/javascript/tutorial)
+[Google Directions API](https://developers.google.com/maps/documentation/directions/start)
+[Google Geocoding API](https://developers.google.com/maps/documentation/geocoding/start)
+
+
+https://developers.google.com/maps/documentation/directions/start
 ## Database ##TODO
 
 Explaining what database (and version) has been used. Provide download links.

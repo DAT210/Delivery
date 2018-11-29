@@ -16,46 +16,50 @@ app.config["DATABASE_USER"] = "root"
 app.config["DATABASE_PASSWORD"] = "root"
 app.config["DATABASE_DB"] = "delivery"
 app.config["DATABASE_HOST"] = "db"
-app.config["DATABASE_PORT"] = "3306"
+# app.config["DATABASE_PORT"] = "3306"
+
 
 # Makes it possible to send POST requests from javascript outside this service.
 CORS(app)
 
 
-########################### DATABASE EXAMPLE #################################
+########################### DATABASE ENDPOINTS #################################
 
-@app.route('/insert_delivery')
+@app.route('/delivery/transport', methods=["POST"])
 def insertDelivery():
-    # pass inn config
-    db = Database(app.config)
-    #did, aid, order_id, customer_id, price, vehicle, order_delivered, order_ready
-    data1 = [1, 1, 1, 1, 59.99, "Car", 0, 0]
-    data2 = [2, 2, 2, 2, 79.99, "Car", 0, 0]
-    db.insert_delivery(data1)
-    return "Inserting delivery into database..."
+    if request.methods == "POST":
+        # pass inn config
+        db = Database(app.config)
+        #did, aid, order_id, customer_id, price, vehicle, order_delivered, order_ready
+        data1 = [1, 1, 1, 1, 59.99, "Car", 0, 0]
+        data2 = [2, 2, 2, 2, 79.99, "Car", 0, 0]
+        db.insert_transport(data1)
+        return "Inserting delivery into database..."
 
-@app.route('/query_delivery')
-def queryDelivery():
+@app.route('/delivery/transport')
+def getDelivery():
     db = Database(app.config)
-    return db.query_delivery()
+    return json.dumps(db.query_transport(), indent=4, sort_keys=True)
 
-@app.route('/query_address')
+@app.route('/delivery/<int:order_id>/address')
+def getDeliveryID(order_id):
+    db = Database(app.config)
+    return json.dumps(db.query_address(order_id), indent=4, sort_keys=True)
+
+
+@app.route('/delivery/address')
 def queryAddress():
     db = Database(app.config)
-    return db.query_address()
+    return json.dumps(db.query_address(0), indent=4, sort_keys=True)
 
-@app.route('/insert_address')
+
+@app.route('/delivery/address', methods=["POST"])
 def insertAddress():
-    data1 = [1, 'Sandnes', 4326, 'MyyyyyVeien', 12, '']
-    data2 = [2, 'Stavanger', 4032, 'Gauselarmen', 14, 'B']
+    # if request.methods == "POST":
+    data = [0, 'Stavanger', 4032, 'Gamle Austråttvei 14', 14, 'B'] # Fake data
     db = Database(app.config)
-    db.insert_address(data1)
+    db.insert_address(data)
     return "Inserting address into database..."
-
-
-
-
-
 ###########################        END       #################################
 
 
@@ -144,8 +148,8 @@ def eta(order_id):
 
 ########################### DELIVERY UI #################################
 
-#TODO: Implement functioncalls depending on routes and content of http requests
 
+#TODO: Implement functioncalls depending on routes and content of http requests
 
 
 ##########Just for testing#################################################
