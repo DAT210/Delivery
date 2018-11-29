@@ -16,12 +16,10 @@ app.config["DATABASE_USER"] = "root"
 app.config["DATABASE_PASSWORD"] = "root"
 app.config["DATABASE_DB"] = "delivery"
 app.config["DATABASE_HOST"] = "db"
-# app.config["DATABASE_PORT"] = "3306"
-
+app.config["DATABASE_PORT"] = "3306"
 
 # Makes it possible to send POST requests from javascript outside this service.
 CORS(app)
-
 
 ########################### DATABASE ENDPOINTS #################################
 
@@ -60,6 +58,7 @@ def insertAddress():
     db = Database(app.config)
     db.insert_address(data)
     return "Inserting address into database..."
+
 ###########################        END       #################################
 
 

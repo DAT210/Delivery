@@ -40,6 +40,7 @@ class Delivery_client:
 
     #Fetches a new job for the client
     def _get_job(self):
+
         try:
             r = requests.get(URL_GET_JOBS).content
             response = json.loads(r)

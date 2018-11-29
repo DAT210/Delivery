@@ -24,11 +24,3 @@ CREATE TABLE transport (
     FOREIGN KEY (aid) REFERENCES _address(aid)
 );
 
--- Dummy data
-
-INSERT INTO _address VALUES 
-(0, "Sandnes", 4326, "Gamle Austråttvei", 14, ''),
-(0, "Sandnes", 4326, "Gamle Austråttvei", 15, ''),
-(0, "Sandnes", 4326, "Gamle Austråttvei", 16, '');
-
-

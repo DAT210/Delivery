@@ -10,7 +10,6 @@ services:
     networks: 
       - deliverynet
 
-
   delivery_client:
     container_name: delivery_client
     build:
@@ -18,6 +17,7 @@ services:
       dockerfile: Dockerfile-client
     networks: 
       - deliverynet
+
 
 networks: 
   deliverynet:

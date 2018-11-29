@@ -51,6 +51,7 @@ class Database:
             sql = "SELECT aid, city, postcode, street, street_number, house_number FROM _address"
         else:  
             sql = "SELECT aid, city, postcode, street, street_number, house_number FROM _address WHERE aid={}".format(id)
+
         try:
             cur.execute(sql)
             data = []
