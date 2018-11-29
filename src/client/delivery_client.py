@@ -40,8 +40,14 @@ class Delivery_client:
 
     #Fetches a new job for the client
     def _get_job(self):
-        r = requests.get(URL_GET_JOBS).content
-        if json.loads(r) == False:
+
+        try:
+            r = requests.get(URL_GET_JOBS).content
+            response = json.loads(r)
+        except:
+            print("No connection")
+            response = False
+        if response == False:
             return False
         else:
             self.job = json.loads(r)
