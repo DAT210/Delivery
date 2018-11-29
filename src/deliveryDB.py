@@ -21,9 +21,9 @@ class Database:
     # TODO kjør tester
 
     # 1. method: Fetch all from first table (delivery)
-    def query_delivery(self):
+    def query_transport(self):
         cur = self.db.cursor()
-        sql = "SELECT did, aid, order_id, customer_id, price, vehicle, order_delivered, order_ready FROM delivery"
+        sql = "SELECT did, aid, order_id, customer_id, price, vehicle, order_delivered, order_ready FROM transport"
         try:
             cur.execute(sql)
             data = []
@@ -38,19 +38,19 @@ class Database:
                     "order_delivered": order_delivered,
                     "order_ready": order_ready
                 })
-            return json.dumps(data)
+            return data
         except mysql.connector.Error:
             return False
         finally:
             cur.close()
 
     # 2. fetch all from (_address)
-    def query_address(self, id=None):
+    def query_address(self, id):
         cur = self.db.cursor()
-        if id != None:
-            sql = "SELECT aid, city, postcode, street, street_number, house_number FROM _address WHERE id={}".format(id)
-        else:  
+        if id == 0:
             sql = "SELECT aid, city, postcode, street, street_number, house_number FROM _address"
+        else:  
+            sql = "SELECT aid, city, postcode, street, street_number, house_number FROM _address WHERE aid={}".format(id)
         try:
             cur.execute(sql)
             data = []
@@ -63,7 +63,7 @@ class Database:
                     "street_number": street_number,
                     "house_number": house_number
                 })
-            return json.dumps(data)
+            return data
         except mysql.connector.Error:
             return False
         finally:
@@ -72,9 +72,9 @@ class Database:
 
     # 4. method insert into delivery
     # pass inn ann array containing all eight fields
-    def insert_delivery(self, data):
+    def insert_transport(self, data):
         cur = self.db.cursor()
-        sql = "INSERT INTO delivery VALUES ({}, {}, {}, {}, {}, '{}', {}, {})".format(
+        sql = "INSERT INTO transport VALUES ({}, {}, {}, {}, {}, '{}', {}, {})".format(
             data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
         try:
             cur.execute(sql)
@@ -85,7 +85,7 @@ class Database:
         finally:
             cur.close()
 
-    # 5. method insert into delivery
+    # 5. method insert into address
     # pass inn ann array containing all six fields
     def insert_address(self, data):
         cur = self.db.cursor()

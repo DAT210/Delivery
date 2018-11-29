@@ -1,8 +1,7 @@
 DROP DATABASE IF EXISTS delivery;
-CREATE DATABASE delivery CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE delivery CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; 
+SET default_storage_engine=INNODB; 
 USE delivery;
-
-DROP TABLE IF EXISTS delivery;
 
 CREATE TABLE _address (
     aid INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -13,7 +12,7 @@ CREATE TABLE _address (
     house_number CHAR(1)
 );
 
-CREATE TABLE delivery (
+CREATE TABLE transport (
     did INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     aid INT NOT NULL,
     order_id INT NOT NULL,
@@ -25,7 +24,11 @@ CREATE TABLE delivery (
     FOREIGN KEY (aid) REFERENCES _address(aid)
 );
 
+-- Dummy data
+
 INSERT INTO _address VALUES 
-(0, "Sandnes", 4326, "Gamle Austråttvei", 14, '');
+(0, "Sandnes", 4326, "Gamle Austråttvei", 14, ''),
+(0, "Sandnes", 4326, "Gamle Austråttvei", 15, ''),
+(0, "Sandnes", 4326, "Gamle Austråttvei", 16, '');
 
 
