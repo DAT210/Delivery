@@ -10,6 +10,15 @@ services:
     networks: 
       - deliverynet
 
+
+  delivery_client:
+    container_name: delivery_client
+    build:
+      context: ./src/client
+      dockerfile: Dockerfile-client
+    networks: 
+      - deliverynet
+
 networks: 
   deliverynet:
     driver: bridge
