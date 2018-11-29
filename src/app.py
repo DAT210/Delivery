@@ -18,6 +18,7 @@ app.config["DATABASE_DB"] = "delivery"
 app.config["DATABASE_HOST"] = "db"
 # app.config["DATABASE_PORT"] = "3306"
 
+
 # Makes it possible to send POST requests from javascript outside this service.
 CORS(app)
 
@@ -147,8 +148,8 @@ def eta(order_id):
 
 ########################### DELIVERY UI #################################
 
-#TODO: Implement functioncalls depending on routes and content of http requests
 
+#TODO: Implement functioncalls depending on routes and content of http requests
 
 
 ##########Just for testing#################################################

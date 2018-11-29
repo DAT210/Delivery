@@ -51,16 +51,12 @@ pip install requests
 The purpose of this API is to update ETA for a delivery. It's reliant on a service to provide GPS coordinates to continously update ETA and position.
 To do this there is an avaliable script to simulate this, as well as a script to create fake orders.
 
+
 To start the simulation, run the server, order generator script and the delivery client.
 
-```shell
-cd delivery/src
-python api.py
-python route_tests.py
-python delivery_client.py
-```
 
 The page for viewing ETA updates will be here: http://localhost:1337/delivery/ORDER_ID/map (replace "ORDER_ID" with the ID of the desired order)
+
 
 
 ### Building
