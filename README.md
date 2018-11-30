@@ -1,3 +1,4 @@
+[![Build Status](https://dev.azure.com/dat210h18/DAT210/_apis/build/status/DAT210.Delivery)](https://dev.azure.com/dat210h18/DAT210/_build/latest?definitionId=11)
 ![Logo of the project](https://bigmickey.ie/wp-content/uploads/2017/10/Delivery.png)
 
 # Delivery [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)
