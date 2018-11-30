@@ -1,6 +1,6 @@
 ![Logo of the project](https://bigmickey.ie/wp-content/uploads/2017/10/Delivery.png)
 
-# Delivery - Group 2
+# Delivery [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)
 
 > Delivery service for restaurant project
 
