@@ -134,11 +134,13 @@ if (5 === '5') {
 
 * Four space indentation
 
+
 ##  Api Reference
 
 If the api is external, link to api documentation. If not describe your api including authentication methods as well as explaining all the endpoints with their required parameters.
 
 When the API is running the following endpoints are avaliable:
+
 ```shell
  /delivery/methods/eta
  /delivery/ORDER_ID/eta
