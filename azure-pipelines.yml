@@ -11,4 +11,6 @@ variables:
 
 steps:
 - script: docker build -f Dockerfile -t $(imageName) .
-  displayName: 'docker build'
+  displayName: 'dAPI'
+- script: docker build -f src/client/Dockerfile-client -t $(imageName) ./src/client
+  displayName: 'dclient'
