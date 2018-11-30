@@ -1,10 +1,10 @@
 ![Logo of the project](https://bigmickey.ie/wp-content/uploads/2017/10/Delivery.png)
 
-# Delivery [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)
+# Delivery [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/your/your-project/blob/master/LICENSE)  [![Build Status](https://dev.azure.com/dat210h18/DAT210/_apis/build/status/DAT210.Delivery)](https://dev.azure.com/dat210h18/DAT210/_build/latest?definitionId=11)
 
 > Delivery service for restaurant project
 
-Delivery service that will provide APIs for obtaining info regarding available delivery options and ETAs.
+Delivery service that will provide APIs for obtaining info regarding available delivery options, ETAs and tracking for customers.
 
 ## Installing / Getting started
 ```shell
@@ -14,8 +14,8 @@ run command: "docker-compose up --build"
 ```
 
 ### Container should now be visible
-* On docker: localhost:4020
-* On docker toolbox: 192.168.99.100:4020
+* On docker: localhost:22000
+* On docker toolbox: 192.168.99.100:22000
 
 ## Developing
 
@@ -48,50 +48,45 @@ pip install mysql-connector
 pip install requests
 ```
 
+### Run and test the newly set up environment
 The purpose of this API is to update ETA for a delivery. It's reliant on a service to provide GPS coordinates to continously update ETA and position.
 To do this there is an avaliable script to simulate this, as well as a script to create fake orders.
 
 
-To start the simulation, run the server, order generator script and the delivery client.
+To start the simulation, run the server trough docker and run the order generator script that resides in src/client/route_tests.py. You have to secify the target URL here depending on you are running in Docker Toolbox or Docker.
 
 
 The page for viewing ETA updates will be here: http://localhost:1337/delivery/ORDER_ID/map (replace "ORDER_ID" with the ID of the desired order)
 
 
 
-### Building
+### Building without Docker
 
-To run the server and the delivery client first change directory to the src folder of delivery and then execute the api and delivery client:
+To run the server and the delivery client without Docker first change directory to the src folder of delivery and then execute the api and then the delivery client which resides in src/client:
 ```shell
 cd delivery/src/
-```
-
-```python
 python api.py
+cd /client
 python delivery_client.py
 ```
 
 The api should now be available on http://localhost:1337
 
-### Deploying / Publishing ##TODO
-give instructions on how to build and release a new version
-In case there's some step you have to take that publishes this project to a
-server, this is the right time to state it.
 
-```shell
-packagemanager deploy your-project -s server.com -u username -p password
-```
+### Deployin
+There is an Azure pipeline that automaticly builds the two containers running the API and delivery client. This pipe rebuilds automaticly every time there is a new commit to the master branch. 
 
-And again you'd need to tell what the previous code actually does.
+This means you dont have to do anything, unless you have made changes regarding containers. (Added, removed, edited).
 
-## Versioning ##TODO
+## Versioning
 
-We can maybe use [SemVer](http://semver.org/) for versioning. For the versions available, see the [link to tags on this repository](/tags).
+We use [SemVer](http://semver.org/) for versioning. That means the MAJOR.MINOR.PATCH notation.
 
-## Configuration ##TODO
+The application is currently in version 1.0.0
 
-Here you should write what are all of the configurations a user can enter when
-using the project.
+## Configuration
+
+If the user wants to run the full application on their own computer, you might have to alter the request URL in the route_tests.py script which resides in Delivery/src/client. The target adress will vary depending on you run the application from commandline, Docker or Docker Toolbox.
 
 ## Tests
 
@@ -102,9 +97,8 @@ The tests is saved under:
 delivery/test/integration/Delivery_API_tests.json
 ```
 
-Load this file in to Postman and you will get a collection with tests that can test alle teh API methods, both in legan and illegal ways. These tests can be run together as a collection or seperatly.
+Load this file in to Postman and you will get a collection with tests that can test all thh API methods, both in legan and illegal ways. These tests can be run together as a collection or seperatly.
 
-## Style guide
 
 ### Python
 
@@ -214,3 +208,4 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
