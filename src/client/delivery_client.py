@@ -3,6 +3,8 @@ import json, requests, time, os
 NAMES = ["Karl", "Per", "Knut", "Ole J Moi", "Asle Berge"]
 URL_GET_JOBS = "http://delivery_service:80/delivery/client/job?"
 URL_SEND_UPDATE = "http://delivery_service:80/delivery/client/update?"
+#URL_GET_JOBS = "http://127.0.0.1:80/delivery/client/job?"
+#URL_SEND_UPDATE = "http://127.0.0.1:80/delivery/client/update?"
 
 
 

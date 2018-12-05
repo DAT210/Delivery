@@ -40,6 +40,7 @@ jobs = [{
 def main():
     for o in jobs:
         r = requests.post("http://192.168.99.100:22000/delivery/neworder", data=o)
+        #r = requests.post("http://127.0.0.1:80/delivery/neworder", data=o)
         print(r.content)
 
 
