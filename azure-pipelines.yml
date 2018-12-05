@@ -7,10 +7,19 @@ pool:
   vmImage: 'Ubuntu 16.04'
 
 variables:
-  imageName: 'your-container-image-name:$(build.buildId)'
+  imageA: 'delivery-API'
+  imageD: 'delivery-client'
+  latestTagA: '$(imageA):latest'
+  latestTagD: '$(imageD):latest'
 
 steps:
-- script: docker build -f Dockerfile -t $(imageName) .
+- script: |
+    docker build -f Dockerfile -t $(dockerId).azurecr.io/$(latestTagA) .
+    docker login -u $(dockerId) -p $(pswd) $(dockerid).azurecr.io
+    docker push $(dockerId).azurecr.io/$(latestTag)
   displayName: 'dAPI'
-- script: docker build -f src/client/Dockerfile-client -t $(imageName) ./src/client
+- script: |
+    docker build -f src/client/Dockerfile-client -t $(dockerId).azurecr.io/$(latestTagD) ./src/client
+    docker login -u $(dockerId) -p $(pswd) $(dockerid).azurecr.io
+    docker push $(dockerId).azurecr.io/$(latestTag)
   displayName: 'dclient'
